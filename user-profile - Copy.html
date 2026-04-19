@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Profile — Corefinity</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            brand: {
+              orange:  '#F97316',
+              'orange-hover': '#EA6C0A',
+              'orange-light': '#FFF7ED',
+              'orange-muted': '#FDBA74',
+              blue:    '#3B82F6',
+              'blue-light': '#EFF6FF',
+              'blue-dark':  '#1D4ED8',
+            },
+            surface: {
+              bg:      '#F1F5F9',
+              card:    '#FFFFFF',
+              border:  '#E2E8F0',
+              'border-focus': '#F97316',
+            },
+            text: {
+              primary:   '#0F172A',
+              secondary: '#475569',
+              muted:     '#94A3B8',
+              link:      '#3B82F6',
+            },
+          },
+          boxShadow: {
+            card:  '0 1px 3px 0 rgba(0,0,0,.06), 0 1px 2px -1px rgba(0,0,0,.04)',
+            'card-hover': '0 4px 12px 0 rgba(0,0,0,.08)',
+            input: '0 0 0 3px rgba(249,115,22,.15)',
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    /* Smooth transitions */
+    *, *::before, *::after { box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; }
+
+    /* Sidebar active indicator */
+    .nav-item-active {
+      background: #FFF7ED;
+      color: #F97316;
+      border-right: 3px solid #F97316;
+    }
+    .nav-item-active svg { color: #F97316; }
+
+    /* Input focus ring */
+    .form-input:focus {
+      outline: none;
+      border-color: #F97316;
+      box-shadow: 0 0 0 3px rgba(249,115,22,.15);
+    }
+
+    /* Dropdown */
+    .dropdown-menu { display: none; }
+    .dropdown-menu.open { display: block; }
+
+    /* Password toggle */
+    .pw-toggle { cursor: pointer; }
+
+    /* Sidebar mobile toggle */
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); transition: transform .25s ease; }
+      .sidebar.open { transform: translateX(0); }
+    }
+
+    /* Subtle section divider */
+    .section-card { transition: box-shadow .2s ease; }
+    .section-card:hover { box-shadow: 0 4px 12px 0 rgba(0,0,0,.08); }
+
+    /* Toast */
+    #toast {
+      transition: opacity .3s ease, transform .3s ease;
+      opacity: 0; transform: translateY(8px);
+    }
+    #toast.show { opacity: 1; transform: translateY(0); }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #F1F5F9; }
+    ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+  </style>
+</head>
+<body class="bg-surface-bg text-text-primary antialiased min-h-screen">
+
+  <!-- ═══════════════════════════════════════════════════════════
+       TOP NAVIGATION BAR
+  ═══════════════════════════════════════════════════════════ -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-surface-border h-14 flex items-center px-4 gap-4">
+
+    <!-- Mobile sidebar toggle -->
+    <button id="sidebarToggle" class="md:hidden p-2 rounded-lg hover:bg-surface-bg transition-colors" aria-label="Toggle sidebar">
+      <svg class="w-5 h-5 text-text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+
+    <!-- Logo -->
+    <div class="flex items-center gap-2 mr-2">
+      <div class="w-7 h-7 rounded-lg bg-brand-orange flex items-center justify-center">
+        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <span class="font-semibold text-text-primary text-sm hidden sm:block">Corefinity</span>
+    </div>
+
+    <!-- Client selector -->
+    <div class="relative">
+      <select class="appearance-none bg-surface-bg border border-surface-border text-text-secondary text-sm rounded-lg pl-3 pr-8 py-2 cursor-pointer hover:border-brand-orange transition-colors focus:outline-none focus:border-brand-orange focus:shadow-input" aria-label="Client selector">
+        <option>Currently viewing as: All clients</option>
+        <option>Client A</option>
+        <option>Client B</option>
+      </select>
+      <svg class="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+      </svg>
+    </div>
+
+    <!-- Search -->
+    <div class="flex-1 max-w-md relative hidden sm:block">
+      <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/>
+      </svg>
+      <input type="search" placeholder="Press / to search…" aria-label="Search"
+        class="w-full bg-surface-bg border border-surface-border rounded-lg pl-9 pr-4 py-2 text-sm text-text-primary placeholder-text-muted focus:outline-none focus:border-brand-orange focus:shadow-input transition-all form-input" />
+      <kbd class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-text-muted bg-white border border-surface-border rounded px-1.5 py-0.5">/</kbd>
+    </div>
+
+    <div class="ml-auto flex items-center gap-2">
+      <!-- Notification bell -->
+      <button class="relative p-2 rounded-lg hover:bg-surface-bg transition-colors" aria-label="Notifications">
+        <svg class="w-5 h-5 text-text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+        </svg>
+        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-brand-orange rounded-full"></span>
+      </button>
+
+      <!-- User menu -->
+      <div class="relative" id="userMenuWrapper">
+        <button id="userMenuBtn" class="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-lg hover:bg-surface-bg transition-colors border border-transparent hover:border-surface-border" aria-haspopup="true" aria-expanded="false">
+          <div class="w-7 h-7 rounded-full bg-brand-orange flex items-center justify-center text-white text-xs font-semibold select-none">CJ</div>
+          <span class="text-sm font-medium text-text-primary hidden sm:block">Catherine Jarosz</span>
+          <svg class="w-4 h-4 text-text-muted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+
+        <!-- Dropdown -->
+        <div id="userDropdown" class="dropdown-menu absolute right-0 top-full mt-1.5 w-48 bg-white border border-surface-border rounded-xl shadow-card-hover z-50 py-1 overflow-hidden" role="menu">
+          <a href="#" class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-brand-orange font-medium hover:bg-brand-orange-light transition-colors" role="menuitem">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path stroke-linecap="round" d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            Profile
+          </a>
+          <a href="#" class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-text-secondary hover:bg-surface-bg transition-colors" role="menuitem">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+            SSH Keys
+          </a>
+          <div class="border-t border-surface-border my-1"></div>
+          <a href="#" class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors" role="menuitem">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+            Logout
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       LAYOUT WRAPPER (below fixed header)
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="flex pt-14 min-h-screen">
+
+    <!-- ═══════════════════════════════════════════════════════
+         SIDEBAR
+    ═══════════════════════════════════════════════════════ -->
+    <aside id="sidebar" class="sidebar fixed md:sticky top-14 left-0 h-[calc(100vh-3.5rem)] w-60 bg-white border-r border-surface-border flex-shrink-0 z-40 overflow-y-auto">
+
+      <!-- Sidebar header -->
+      <div class="px-4 pt-5 pb-3">
+        <p class="text-xs font-semibold text-text-muted uppercase tracking-widest">Account Settings</p>
+      </div>
+
+      <nav class="px-2 pb-6" aria-label="Profile navigation">
+
+        <!-- Profile -->
+        <a href="#" class="nav-item-active flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium mb-0.5 transition-all" aria-current="page">
+          <svg class="w-4.5 h-4.5 w-[18px] h-[18px] flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="4"/><path stroke-linecap="round" d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+          </svg>
+          Profile
+        </a>
+
+        <!-- Notifications -->
+        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-text-secondary hover:bg-surface-bg hover:text-text-primary mb-0.5 transition-all">
+          <svg class="w-[18px] h-[18px] flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+          </svg>
+          Notifications
+        </a>
+
+        <!-- API Tokens -->
+        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-text-secondary hover:bg-surface-bg hover:text-text-primary mb-0.5 transition-all">
+          <svg class="w-[18px] h-[18px] flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+          </svg>
+          API Tokens
+        </a>
+
+        <!-- Two Factor Auth -->
+        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-text-secondary hover:bg-surface-bg hover:text-text-primary mb-0.5 transition-all">
+          <svg class="w-[18px] h-[18px] flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+          </svg>
+          Two Factor Auth
+        </a>
+
+        <!-- Firewall -->
+        <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-text-secondary hover:bg-surface-bg hover:text-text-primary mb-0.5 transition-all">
+          <svg class="w-[18px] h-[18px] flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+          Firewall
+        </a>
+
+      </nav>
+    </aside>
+
+    <!-- Mobile overlay -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/40 z-30 hidden md:hidden" aria-hidden="true"></div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         MAIN CONTENT
+    ═══════════════════════════════════════════════════════ -->
+    <main class="flex-1 min-w-0 px-4 sm:px-6 lg:px-8 py-8 max-w-3xl">
+
+      <!-- Page header -->
+      <div class="mb-8">
+        <nav class="flex items-center gap-1.5 text-xs text-text-muted mb-3" aria-label="Breadcrumb">
+          <a href="#" class="hover:text-brand-orange transition-colors">Dashboard</a>
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+          <span class="text-text-secondary font-medium">Update Profile</span>
+        </nav>
+        <h1 class="text-2xl font-bold text-text-primary tracking-tight">Update Profile</h1>
+        <p class="text-sm text-text-secondary mt-1">Manage your personal information and account security settings.</p>
+      </div>
+
+      <!-- ─── SECTION 1: Profile Info ─── -->
+      <section class="section-card bg-white rounded-2xl border border-surface-border shadow-card mb-5" aria-labelledby="profile-heading">
+        <div class="px-6 py-5 border-b border-surface-border flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-brand-orange-light flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-brand-orange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="8" r="4"/><path stroke-linecap="round" d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+            </svg>
+          </div>
+          <div>
+            <h2 id="profile-heading" class="text-base font-semibold text-text-primary">Profile</h2>
+            <p class="text-xs text-text-muted mt-0.5">Update your account's profile information and email address.</p>
+          </div>
+        </div>
+
+        <div class="px-6 py-6 space-y-5">
+
+          <!-- Avatar row -->
+          <div class="flex items-center gap-4">
+            <div class="w-16 h-16 rounded-2xl bg-brand-orange flex items-center justify-center text-white text-xl font-bold select-none flex-shrink-0">CJ</div>
+            <div>
+              <p class="text-sm font-medium text-text-primary">Catherine Jarosz</p>
+              <p class="text-xs text-text-muted mt-0.5">Manager · example@corefinity.com</p>
+              <button class="mt-2 text-xs text-brand-blue hover:text-brand-blue-dark font-medium transition-colors">Change avatar</button>
+            </div>
+          </div>
+
+          <div class="border-t border-surface-border"></div>
+
+          <!-- Name -->
+          <div>
+            <label for="name" class="block text-sm font-medium text-text-primary mb-1.5">
+              Full Name <span class="text-red-400" aria-hidden="true">*</span>
+            </label>
+            <input id="name" name="name" type="text" value="Example user" autocomplete="name" required
+              class="form-input w-full bg-surface-bg border border-surface-border rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder-text-muted transition-all"
+              placeholder="Your full name" />
+          </div>
+
+          <!-- Email -->
+          <div>
+            <label for="email" class="block text-sm font-medium text-text-primary mb-1.5">
+              Email Address <span class="text-red-400" aria-hidden="true">*</span>
+            </label>
+            <div class="relative">
+              <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+              </svg>
+              <input id="email" name="email" type="email" value="example@corefinity.com" autocomplete="email" required
+                class="form-input w-full bg-surface-bg border border-surface-border rounded-xl pl-10 pr-4 py-2.5 text-sm text-text-primary placeholder-text-muted transition-all"
+                placeholder="you@example.com" />
+            </div>
+          </div>
+
+          <!-- Position -->
+          <div>
+            <label for="position" class="block text-sm font-medium text-text-primary mb-1.5">Position</label>
+            <input id="position" name="position" type="text" value="Manager" autocomplete="organization-title"
+              class="form-input w-full bg-surface-bg border border-surface-border rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder-text-muted transition-all"
+              placeholder="e.g. Manager, Developer" />
+            <p class="text-xs text-text-muted mt-1.5">Your role or job title within the organisation.</p>
+          </div>
+        </div>
+
+        <div class="px-6 py-4 bg-surface-bg rounded-b-2xl border-t border-surface-border flex items-center justify-end gap-3">
+          <button type="button" class="px-4 py-2 text-sm font-medium text-text-secondary hover:text-text-primary transition-colors rounded-lg hover:bg-surface-border">
+            Cancel
+          </button>
+          <button type="button" onclick="showToast('Profile saved successfully!')"
+            class="px-5 py-2 bg-brand-orange hover:bg-brand-orange-hover text-white text-sm font-semibold rounded-xl transition-all shadow-sm hover:shadow-md active:scale-95">
+            Save Changes
+          </button>
+        </div>
+      </section>
+
+      <!-- ─── SECTION 2: Mobile Number ─── -->
+      <section class="section-card bg-white rounded-2xl border border-surface-border shadow-card mb-5" aria-labelledby="mobile-heading">
+        <div class="px-6 py-5 border-b border-surface-border flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-brand-blue-light flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-brand-blue" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <div>
+            <h2 id="mobile-heading" class="text-base font-semibold text-text-primary">Mobile Number</h2>
+            <p class="text-xs text-text-muted mt-0.5">Used for two-factor authentication and account alerts.</p>
+          </div>
+        </div>
+
+        <div class="px-6 py-6">
+          <label for="mobile" class="block text-sm font-medium text-text-primary mb-1.5">Phone Number</label>
+          <div class="flex gap-2">
+            <!-- Country code -->
+            <div class="relative flex-shrink-0">
+              <select id="countryCode" aria-label="Country code"
+                class="form-input appearance-none bg-surface-bg border border-surface-border rounded-xl pl-3 pr-8 py-2.5 text-sm text-text-primary cursor-pointer transition-all">
+                <option value="+44">🇬🇧 +44</option>
+                <option value="+1">🇺🇸 +1</option>
+                <option value="+61">🇦🇺 +61</option>
+                <option value="+49">🇩🇪 +49</option>
+                <option value="+33">🇫🇷 +33</option>
+                <option value="+81">🇯🇵 +81</option>
+              </select>
+              <svg class="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-text-muted pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </div>
+            <!-- Number input -->
+            <input id="mobile" name="mobile" type="tel" autocomplete="tel"
+              class="form-input flex-1 bg-surface-bg border border-surface-border rounded-xl px-4 py-2.5 text-sm text-text-primary placeholder-text-muted transition-all"
+              placeholder="7700 900 000" />
+          </div>
+          <p class="text-xs text-text-muted mt-2 flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"/><path stroke-linecap="round" d="M12 8v4m0 4h.01"/>
+            </svg>
+            Enter your number in international format, including the country code.
+          </p>
+        </div>
+
+        <div class="px-6 py-4 bg-surface-bg rounded-b-2xl border-t border-surface-border flex items-center justify-end gap-3">
+          <button type="button" class="px-4 py-2 text-sm font-medium text-text-secondary hover:text-text-primary transition-colors rounded-lg hover:bg-surface-border">
+            Cancel
+          </button>
+          <button type="button" onclick="showToast('Mobile number updated!')"
+            class="px-5 py-2 bg-brand-orange hover:bg-brand-orange-hover text-white text-sm font-semibold rounded-xl transition-all shadow-sm hover:shadow-md active:scale-95">
+            Update
+          </button>
+        </div>
+      </section>
+
+      <!-- ─── SECTION 3: Update Password ─── -->
+      <section class="section-card bg-white rounded-2xl border border-surface-border shadow-card mb-5" aria-labelledby="password-heading">
+        <div class="px-6 py-5 border-b border-surface-border flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-green-50 flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+            </svg>
+          </div>
+          <div>
+            <h2 id="password-heading" class="text-base font-semibold text-text-primary">Update Password</h2>
+            <p class="text-xs text-text-muted mt-0.5">Ensure your account is using a long, random password to stay secure.</p>
+          </div>
+        </div>
+
+        <div class="px-6 py-6 space-y-5">
+
+          <!-- Current Password -->
+          <div>
+            <label for="currentPassword" class="block text-sm font-medium text-text-primary mb-1.5">
+              Current Password <span class="text-red-400" aria-hidden="true">*</span>
+            </label>
+            <div class="relative">
+              <input id="currentPassword" name="currentPassword" type="password" autocomplete="current-password" required
+                class="form-input w-full bg-surface-bg border border-surface-border rounded-xl px-4 pr-11 py-2.5 text-sm text-text-primary placeholder-text-muted transition-all"
+                placeholder="Enter current password" />
+              <button type="button" class="pw-toggle absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary transition-colors" aria-label="Toggle password visibility" onclick="togglePw('currentPassword', this)">
+                <svg class="w-4.5 h-4.5 w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- New Password -->
+          <div>
+            <label for="newPassword" class="block text-sm font-medium text-text-primary mb-1.5">
+              New Password <span class="text-red-400" aria-hidden="true">*</span>
+            </label>
+            <div class="relative">
+              <input id="newPassword" name="newPassword" type="password" autocomplete="new-password" required
+                class="form-input w-full bg-surface-bg border border-surface-border rounded-xl px-4 pr-11 py-2.5 text-sm text-text-primary placeholder-text-muted transition-all"
+                placeholder="Enter new password"
+                oninput="checkStrength(this.value)" />
+              <button type="button" class="pw-toggle absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary transition-colors" aria-label="Toggle password visibility" onclick="togglePw('newPassword', this)">
+                <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                </svg>
+              </button>
+            </div>
+            <!-- Password strength meter -->
+            <div class="mt-2">
+              <div class="flex gap-1 mb-1" id="strengthBars">
+                <div class="h-1 flex-1 rounded-full bg-surface-border transition-colors" id="bar1"></div>
+                <div class="h-1 flex-1 rounded-full bg-surface-border transition-colors" id="bar2"></div>
+                <div class="h-1 flex-1 rounded-full bg-surface-border transition-colors" id="bar3"></div>
+                <div class="h-1 flex-1 rounded-full bg-surface-border transition-colors" id="bar4"></div>
+              </div>
+              <p class="text-xs text-text-muted" id="strengthLabel">Use 8+ characters with a mix of letters, numbers & symbols.</p>
+            </div>
+          </div>
+
+          <!-- Confirm Password -->
+          <div>
+            <label for="confirmPassword" class="block text-sm font-medium text-text-primary mb-1.5">
+              Confirm Password <span class="text-red-400" aria-hidden="true">*</span>
+            </label>
+            <div class="relative">
+              <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" required
+                class="form-input w-full bg-surface-bg border border-surface-border rounded-xl px-4 pr-11 py-2.5 text-sm text-text-primary placeholder-text-muted transition-all"
+                placeholder="Re-enter new password" />
+              <button type="button" class="pw-toggle absolute right-3 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-secondary transition-colors" aria-label="Toggle password visibility" onclick="togglePw('confirmPassword', this)">
+                <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Security tip -->
+          <div class="flex items-start gap-3 bg-amber-50 border border-amber-100 rounded-xl px-4 py-3">
+            <svg class="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+            <p class="text-xs text-amber-700 leading-relaxed">Use a password manager to generate a strong, unique password. Never reuse passwords across services.</p>
+          </div>
+        </div>
+
+        <div class="px-6 py-4 bg-surface-bg rounded-b-2xl border-t border-surface-border flex items-center justify-end gap-3">
+          <button type="button" class="px-4 py-2 text-sm font-medium text-text-secondary hover:text-text-primary transition-colors rounded-lg hover:bg-surface-border">
+            Cancel
+          </button>
+          <button type="button" onclick="showToast('Password updated successfully!')"
+            class="px-5 py-2 bg-brand-orange hover:bg-brand-orange-hover text-white text-sm font-semibold rounded-xl transition-all shadow-sm hover:shadow-md active:scale-95">
+            Update Password
+          </button>
+        </div>
+      </section>
+
+      <!-- ─── SECTION 4: Danger Zone ─── -->
+      <section class="section-card bg-white rounded-2xl border border-red-100 shadow-card" aria-labelledby="danger-heading">
+        <div class="px-6 py-5 border-b border-red-100 flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-red-50 flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+          </div>
+          <div>
+            <h2 id="danger-heading" class="text-base font-semibold text-red-600">Danger Zone</h2>
+            <p class="text-xs text-text-muted mt-0.5">Irreversible and destructive actions.</p>
+          </div>
+        </div>
+        <div class="px-6 py-5 flex items-center justify-between gap-4 flex-wrap">
+          <div>
+            <p class="text-sm font-medium text-text-primary">Delete Account</p>
+            <p class="text-xs text-text-muted mt-0.5">Permanently delete your account and all associated data. This cannot be undone.</p>
+          </div>
+          <button type="button"
+            class="flex-shrink-0 px-4 py-2 border border-red-300 text-red-600 text-sm font-medium rounded-xl hover:bg-red-50 transition-all active:scale-95">
+            Delete Account
+          </button>
+        </div>
+      </section>
+
+      <p class="text-xs text-text-muted text-center mt-8 pb-4">Corefinity Control Panel · <a href="#" class="hover:text-brand-orange transition-colors">Privacy Policy</a> · <a href="#" class="hover:text-brand-orange transition-colors">Terms</a></p>
+    </main>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       TOAST NOTIFICATION
+  ═══════════════════════════════════════════════════════════ -->
+  <div id="toast" role="status" aria-live="polite"
+    class="fixed bottom-6 right-6 z-[9999] flex items-center gap-3 bg-text-primary text-white text-sm font-medium px-4 py-3 rounded-xl shadow-card-hover pointer-events-none select-none">
+    <svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+    </svg>
+    <span id="toastMsg">Saved!</span>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       JAVASCRIPT
+  ═══════════════════════════════════════════════════════════ -->
+  <script>
+    /* ── User dropdown ── */
+    const userMenuBtn = document.getElementById('userMenuBtn');
+    const userDropdown = document.getElementById('userDropdown');
+
+    userMenuBtn.addEventListener('click', () => {
+      const isOpen = userDropdown.classList.toggle('open');
+      userMenuBtn.setAttribute('aria-expanded', isOpen);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!document.getElementById('userMenuWrapper').contains(e.target)) {
+        userDropdown.classList.remove('open');
+        userMenuBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    /* ── Mobile sidebar ── */
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('hidden');
+    });
+    overlay.addEventListener('click', () => {
+      sidebar.classList.remove('open');
+      overlay.classList.add('hidden');
+    });
+
+    /* ── Password toggle ── */
+    function togglePw(id, btn) {
+      const input = document.getElementById(id);
+      const isText = input.type === 'text';
+      input.type = isText ? 'password' : 'text';
+      btn.setAttribute('aria-label', isText ? 'Show password' : 'Hide password');
+      // Swap icon
+      btn.querySelector('svg').innerHTML = isText
+        ? `<path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>`
+        : `<path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>`;
+    }
+
+    /* ── Password strength ── */
+    function checkStrength(val) {
+      const bars = [document.getElementById('bar1'), document.getElementById('bar2'), document.getElementById('bar3'), document.getElementById('bar4')];
+      const label = document.getElementById('strengthLabel');
+      let score = 0;
+      if (val.length >= 8) score++;
+      if (/[A-Z]/.test(val)) score++;
+      if (/[0-9]/.test(val)) score++;
+      if (/[^A-Za-z0-9]/.test(val)) score++;
+
+      const colors = ['bg-red-400', 'bg-amber-400', 'bg-yellow-400', 'bg-green-500'];
+      const labels = ['Weak — add uppercase, numbers & symbols', 'Fair — add numbers & symbols', 'Good — add a symbol for max strength', 'Strong password ✓'];
+
+      bars.forEach((b, i) => {
+        b.className = 'h-1 flex-1 rounded-full transition-colors ' + (i < score ? colors[score - 1] : 'bg-surface-border');
+      });
+
+      if (val.length === 0) {
+        bars.forEach(b => b.className = 'h-1 flex-1 rounded-full bg-surface-border transition-colors');
+        label.textContent = 'Use 8+ characters with a mix of letters, numbers & symbols.';
+        label.className = 'text-xs text-text-muted';
+      } else {
+        label.textContent = labels[score - 1] || labels[0];
+        const labelColors = ['text-red-500', 'text-amber-500', 'text-yellow-600', 'text-green-600'];
+        label.className = 'text-xs ' + (labelColors[score - 1] || labelColors[0]);
+      }
+    }
+
+    /* ── Toast ── */
+    let toastTimer;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      clearTimeout(toastTimer);
+      toast.classList.add('show');
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 3500);
+    }
+
+    /* ── Keyboard shortcut: / to focus search ── */
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        document.querySelector('input[type="search"]')?.focus();
+      }
+    });
+  </script>
+</body>
+</html>
