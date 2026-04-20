@@ -109,12 +109,21 @@ body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  padding-left: 16px; /* Space for accent border */
   transition:
     width var(--cf-t-base) var(--cf-ease-out),
     opacity var(--cf-t-base) var(--cf-ease-out),
     transform var(--cf-t-base) var(--cf-ease-out);
   will-change: width;
   z-index: 40;
+}
+.cf-sidebar::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  width: 16px;
+  background: linear-gradient(180deg, var(--cf-blue) 0%, var(--cf-cyan) 100%);
+  z-index: 10;
 }
 .cf-sidebar nav {
   overflow-y: auto;
@@ -124,9 +133,16 @@ body {
 
 /* Desktop collapse state */
 .cf-sidebar--collapsed {
-  width: 0;
-  opacity: 0;
-  pointer-events: none;
+  width: 5rem; /* ~80px: 16px blue bar + 64px icon area */
+}
+.cf-sidebar--collapsed .cf-nav-text,
+.cf-sidebar--collapsed .cf-sidebar-hide {
+  display: none !important;
+}
+.cf-sidebar--collapsed .cf-nav-item {
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 /* Mobile: fixed, slides from left */
@@ -411,6 +427,88 @@ body {
 .cf-select:focus {
   border-color: var(--cf-cyan);
   box-shadow: 0 0 0 3px rgba(0,155,222,.18);
+}
+
+/* Connected Custom Select */
+.cf-connected-select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.cf-connected-select-btn {
+  appearance: none;
+  background: var(--cf-bg);
+  border: 1.5px solid var(--cf-border);
+  border-radius: var(--cf-radius-md);
+  padding: 0.625rem 2.25rem 0.625rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--cf-text-secondary);
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  outline: none;
+  width: 100%;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: border-color var(--cf-t-fast) ease, box-shadow var(--cf-t-fast) ease;
+}
+
+.cf-connected-select-btn:focus,
+.cf-connected-select-btn[aria-expanded="true"] {
+  border-color: var(--cf-cyan);
+  box-shadow: 0 0 0 3px rgba(0,155,222,.18);
+}
+
+.cf-connected-select-btn[aria-expanded="true"] {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top-color: transparent; /* Seamless connection upwards */
+}
+
+.cf-connected-select-panel {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  background: var(--cf-bg);
+  border: 1.5px solid var(--cf-cyan);
+  border-bottom: 1px solid var(--cf-border);
+  border-top-left-radius: var(--cf-radius-md);
+  border-top-right-radius: var(--cf-radius-md);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  box-shadow: 0 -8px 24px -8px rgba(0,155,222,.25);
+  z-index: 50;
+  overflow: hidden;
+  max-height: 240px;
+  overflow-y: auto;
+  margin-bottom: -1.5px; /* Overlap button top border perfectly */
+}
+
+.cf-connected-select-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--cf-text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: 'Inter', sans-serif;
+  transition: background var(--cf-t-fast) ease, color var(--cf-t-fast) ease;
+}
+
+.cf-connected-select-item:hover {
+  background: rgba(0,155,222,.08);
+  color: var(--cf-text-primary);
+}
+
+.cf-connected-select-item.is-selected {
+  background: var(--cf-blue);
+  color: #fff;
 }
 
 /* ─── 14. Buttons ───────────────────────────────────────────────────── */

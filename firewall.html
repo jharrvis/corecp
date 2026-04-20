@@ -333,238 +333,91 @@
     <!-- ═══════════════════════════════════════════════════════════════
          MAIN CONTENT
     ═══════════════════════════════════════════════════════════════ -->
-    <main class="cf-main px-4 sm:px-6 lg:px-8 py-8 max-w-3xl w-full">
-
-      <!-- Page header -->
+    <main class="cf-main px-4 sm:px-6 lg:px-8 py-8 max-w-5xl w-full">
       <div class="mb-8">
         <nav class="cf-breadcrumb mb-2.5" aria-label="Breadcrumb">
-          <a href="#">Dashboard</a>
+          <a href="user-profile.html">Dashboard</a>
           <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7-7"/></svg>
-          <span class="font-medium text-text-secondary">Update Profile</span>
+          <span class="font-medium text-text-secondary">Firewall</span>
         </nav>
-        <h1 class="cf-page-title">Update Profile</h1>
-        <p class="cf-page-desc">Manage your personal information and account security settings.</p>
+        <h1 class="cf-page-title">Manage Your IPs</h1>
+        <p class="cf-page-desc">Whitelist your IPs to have SSH access here! Only IPv4 addresses are supported at this time.</p>
+        <div x-data="{ openPopover: false }" class="relative inline-block mt-2" @click.outside="openPopover = false">
+          <button type="button" @click="openPopover = !openPopover" class="text-xs font-semibold text-corefinity-orange hover:text-corefinity-cyan transition-colors flex items-center gap-1 focus:outline-none">
+            See What's Impacted?
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" d="M12 8v4m0 4h.01"/></svg>
+          </button>
+          
+          <!-- Popover Content -->
+          <div x-show="openPopover" 
+               x-transition:enter="transition ease-out duration-150" 
+               x-transition:enter-start="opacity-0 translate-y-1" 
+               x-transition:enter-end="opacity-100 translate-y-0" 
+               x-transition:leave="transition ease-in duration-100" 
+               x-transition:leave-start="opacity-100 translate-y-0" 
+               x-transition:leave-end="opacity-0 translate-y-1" 
+               style="display:none;" 
+               class="absolute z-50 left-0 top-full mt-2 w-72 sm:w-80 bg-white border border-surface-border rounded-xl shadow-xl p-4 text-left">
+             <div class="absolute -top-2 left-6 w-4 h-4 bg-white border-t border-l border-surface-border transform rotate-45"></div>
+             
+             <div class="relative z-10">
+               <h4 class="text-sm font-bold text-text-primary mb-1">Impacted Services</h4>
+               <p class="text-xs text-text-muted leading-relaxed mb-2">
+                 Whitelisting an IP address restricts access specifically for:
+               </p>
+               <ul class="text-xs text-text-secondary list-disc pl-4 space-y-1">
+                 <li>SSH / Terminal access</li>
+                 <li>SFTP / FTP file transfers</li>
+                 <li>Direct remote Database connections</li>
+               </ul>
+               <p class="text-[11px] text-red-500 font-medium mt-3 bg-red-50 p-2 rounded border border-red-100">
+                 Note: Web traffic (HTTP/HTTPS) remains completely unaffected by this firewall.
+               </p>
+             </div>
+          </div>
+        </div>
       </div>
 
-      <!-- ─── SECTION 1: Profile Info ─── -->
-      <section class="cf-card mb-5" aria-labelledby="profile-heading">
-
-        <div class="cf-card-header">
-          <div class="cf-card-icon cf-card-icon--orange">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path stroke-linecap="round" d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-          </div>
-          <div>
-            <h2 id="profile-heading" class="text-sm font-semibold text-text-primary">Profile</h2>
-            <p class="text-xs text-text-muted mt-0.5">Update your account profile information and email address.</p>
+      <section class="cf-card mb-5">
+        <div class="cf-card-body bg-surface-bg/30">
+          <div class="flex flex-col sm:flex-row items-center gap-4">
+             <input type="text" class="cf-input flex-1 w-full" placeholder="IP Address" />
+             <input type="text" class="cf-input flex-1 w-full" placeholder="Comment" />
           </div>
         </div>
-
-        <div class="cf-card-body cf-card-body--spaced">
-
-          <!-- Avatar row -->
-          <div class="flex items-center gap-4">
-            <div class="cf-avatar cf-avatar--lg">CJ</div>
-            <div>
-              <p class="text-sm font-semibold text-text-primary">Catherine Jarosz</p>
-              <p class="text-xs text-text-muted mt-0.5">Manager · example@corefinity.com</p>
-              <button type="button" class="mt-2 text-xs text-corefinity-cyan hover:text-corefinity-blue font-medium transition-colors">Change avatar</button>
-            </div>
-          </div>
-
-          <div class="cf-divider"></div>
-
-          <!-- Full Name -->
-          <div>
-            <label for="name" class="cf-label">Full Name <span class="text-red-400" aria-hidden="true">*</span></label>
-            <input id="name" name="name" type="text" value="Example user" autocomplete="name" required
-              class="cf-input"
-              placeholder="Your full name" />
-          </div>
-
-          <!-- Email -->
-          <div>
-            <label for="email" class="cf-label">Email Address <span class="text-red-400" aria-hidden="true">*</span></label>
-            <div class="cf-input-group">
-              <svg class="cf-input-group-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-              <input id="email" name="email" type="email" value="example@corefinity.com" autocomplete="email" required
-                class="cf-input"
-                placeholder="you@example.com" />
-            </div>
-          </div>
-
-          <!-- Position -->
-          <div>
-            <label for="position" class="cf-label">Position</label>
-            <input id="position" name="position" type="text" value="Manager" autocomplete="organization-title"
-              class="cf-input"
-              placeholder="e.g. Manager, Developer" />
-            <p class="cf-helper">Your role or job title within the organisation.</p>
-          </div>
-        </div>
-
-        <div class="cf-card-footer">
-          <button type="button" class="cf-btn cf-btn--ghost">Cancel</button>
-          <button type="button" class="cf-btn cf-btn--orange" onclick="showToast('Profile saved successfully!')">
-            Save Changes
-          </button>
+        <div class="cf-card-footer justify-end">
+          <button type="button" class="cf-btn cf-btn--orange" onclick="showToast('IP Added successfully')">Add</button>
         </div>
       </section>
 
-      <!-- ─── SECTION 2: Mobile Number ─── -->
-      <section class="cf-card mb-5" aria-labelledby="mobile-heading">
-
-        <div class="cf-card-header">
-          <div class="cf-card-icon cf-card-icon--cyan">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-          </div>
-          <div>
-            <h2 id="mobile-heading" class="text-sm font-semibold text-text-primary">Mobile Number</h2>
-            <p class="text-xs text-text-muted mt-0.5">Used for two-factor authentication and account alerts.</p>
-          </div>
+      <section class="mt-8 bg-transparent">
+        <div class="mb-2">
+          <h2 class="text-sm font-semibold text-text-primary">Existing IPs</h2>
+          <p class="text-xs text-text-muted mt-0.5">These IPs will be whitelisted.</p>
         </div>
-
-        <div class="cf-card-body">
-          <label for="mobile" class="cf-label">Phone Number</label>
-          <div class="flex gap-2">
-            <!-- Country code -->
-            <div class="relative flex-shrink-0">
-              <select id="countryCode" aria-label="Country code" class="cf-select">
-                <option value="+44">🇬🇧 +44</option>
-                <option value="+1">🇺🇸 +1</option>
-                <option value="+61">🇦🇺 +61</option>
-                <option value="+49">🇩🇪 +49</option>
-                <option value="+33">🇫🇷 +33</option>
-                <option value="+81">🇯🇵 +81</option>
-                <option value="+62">🇮🇩 +62</option>
-              </select>
-              <svg class="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-text-muted pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-            </div>
-            <!-- Number input -->
-            <input id="mobile" name="mobile" type="tel" autocomplete="tel"
-              class="cf-input flex-1"
-              placeholder="7700 900 000" />
-          </div>
-          <p class="cf-helper flex items-center gap-1.5 mt-2">
-            <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" d="M12 8v4m0 4h.01"/></svg>
-            Enter your number in international format, including the country code.
-          </p>
-        </div>
-
-        <div class="cf-card-footer">
-          <button type="button" class="cf-btn cf-btn--ghost">Cancel</button>
-          <button type="button" class="cf-btn cf-btn--cyan" onclick="showToast('Mobile number updated!')">
-            Update
-          </button>
+        <div class="bg-white border text-left border-surface-border rounded-xl overflow-x-auto shadow-sm">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="bg-surface-bg border-b border-surface-border text-xs font-bold text-text-secondary uppercase tracking-wider">
+                <th class="px-6 py-4 whitespace-nowrap">IP ADDRESS</th>
+                <th class="px-6 py-4 whitespace-nowrap">COMMENT</th>
+                <th class="px-6 py-4 whitespace-nowrap">CREATED AT</th>
+                <th class="px-6 py-4"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-surface-border hover:bg-surface-elevated/30 transition-colors">
+                <td class="px-6 py-4 text-sm text-text-primary font-medium">255.255.255.255</td>
+                <td class="px-6 py-4 text-sm text-text-secondary">Example IP</td>
+                <td class="px-6 py-4 text-sm text-text-secondary">2026-04-13 10:21:55</td>
+                <td class="px-6 py-4 text-right">
+                  <button type="button" class="cf-btn bg-red-500 hover:bg-red-600 text-white border-transparent px-5 py-1.5 focus:ring-red-500/30">Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </section>
-
-      <!-- ─── SECTION 3: Update Password ─── -->
-      <section class="cf-card mb-5" aria-labelledby="password-heading">
-
-        <div class="cf-card-header">
-          <div class="cf-card-icon cf-card-icon--blue">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-          </div>
-          <div>
-            <h2 id="password-heading" class="text-sm font-semibold text-text-primary">Update Password</h2>
-            <p class="text-xs text-text-muted mt-0.5">Ensure your account is using a long, random password to stay secure.</p>
-          </div>
-        </div>
-
-        <div class="cf-card-body cf-card-body--spaced">
-
-          <!-- Current Password -->
-          <div>
-            <label for="currentPassword" class="cf-label">Current Password <span class="text-red-400" aria-hidden="true">*</span></label>
-            <div class="cf-input-group relative">
-              <input id="currentPassword" name="currentPassword" type="password" autocomplete="current-password" required
-                class="cf-input cf-input--pr"
-                placeholder="Enter current password" />
-              <button type="button" class="cf-pw-toggle" aria-label="Show password" onclick="cfTogglePw('currentPassword', this)">
-                <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-              </button>
-            </div>
-          </div>
-
-          <!-- New Password -->
-          <div>
-            <label for="newPassword" class="cf-label">New Password <span class="text-red-400" aria-hidden="true">*</span></label>
-            <div class="cf-input-group relative">
-              <input id="newPassword" name="newPassword" type="password" autocomplete="new-password" required
-                class="cf-input cf-input--pr"
-                placeholder="Enter new password"
-                oninput="cfCheckStrength(this.value)" />
-              <button type="button" class="cf-pw-toggle" aria-label="Show password" onclick="cfTogglePw('newPassword', this)">
-                <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-              </button>
-            </div>
-            <!-- Strength meter -->
-            <div class="cf-strength-bars">
-              <div class="cf-strength-bar"></div>
-              <div class="cf-strength-bar"></div>
-              <div class="cf-strength-bar"></div>
-              <div class="cf-strength-bar"></div>
-            </div>
-            <p class="cf-helper" id="cf-strength-label">Use 8+ characters with a mix of letters, numbers &amp; symbols.</p>
-          </div>
-
-          <!-- Confirm Password -->
-          <div>
-            <label for="confirmPassword" class="cf-label">Confirm Password <span class="text-red-400" aria-hidden="true">*</span></label>
-            <div class="cf-input-group relative">
-              <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" required
-                class="cf-input cf-input--pr"
-                placeholder="Re-enter new password" />
-              <button type="button" class="cf-pw-toggle" aria-label="Show password" onclick="cfTogglePw('confirmPassword', this)">
-                <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-              </button>
-            </div>
-          </div>
-
-          <!-- Security tip -->
-          <div class="cf-alert cf-alert--warning">
-            <svg class="w-4 h-4 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-            <p>Use a password manager to generate a strong, unique password. Never reuse passwords across services.</p>
-          </div>
-        </div>
-
-        <div class="cf-card-footer">
-          <button type="button" class="cf-btn cf-btn--ghost">Cancel</button>
-          <button type="button" class="cf-btn cf-btn--blue" onclick="showToast('Password updated successfully!')">
-            Update Password
-          </button>
-        </div>
-      </section>
-
-      <!-- ─── SECTION 4: Danger Zone ─── -->
-      <section class="cf-card" style="border-color: #fecaca;" aria-labelledby="danger-heading">
-
-        <div class="cf-card-header" style="border-color: #fecaca; background: linear-gradient(to right, #fff5f5, #fff);">
-          <div class="cf-card-icon cf-card-icon--red">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-          </div>
-          <div>
-            <h2 id="danger-heading" class="text-sm font-semibold text-red-600">Danger Zone</h2>
-            <p class="text-xs text-text-muted mt-0.5">Irreversible and destructive actions.</p>
-          </div>
-        </div>
-
-        <div class="cf-card-body flex items-center justify-between gap-4 flex-wrap">
-          <div>
-            <p class="text-sm font-medium text-text-primary">Delete Account</p>
-            <p class="text-xs text-text-muted mt-0.5">Permanently delete your account and all associated data. This cannot be undone.</p>
-          </div>
-          <button type="button" class="cf-btn cf-btn--danger flex-shrink-0">
-            Delete Account
-          </button>
-        </div>
-      </section>
-
-      <p class="text-xs text-text-muted text-center mt-8 pb-4">
-        Corefinity Control Panel ·
-        <a href="#" class="hover:text-corefinity-blue transition-colors">Privacy Policy</a> ·
-        <a href="#" class="hover:text-corefinity-blue transition-colors">Terms</a>
-      </p>
     </main>
   </div><!-- /.cf-layout -->
 

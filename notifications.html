@@ -340,229 +340,132 @@
         <nav class="cf-breadcrumb mb-2.5" aria-label="Breadcrumb">
           <a href="#">Dashboard</a>
           <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7-7"/></svg>
-          <span class="font-medium text-text-secondary">Update Profile</span>
+          <span class="font-medium text-text-secondary">Notifications</span>
         </nav>
-        <h1 class="cf-page-title">Update Profile</h1>
-        <p class="cf-page-desc">Manage your personal information and account security settings.</p>
+        <h1 class="cf-page-title">Notifications</h1>
+        <p class="cf-page-desc">Update your notifications settings.</p>
       </div>
 
-      <!-- ─── SECTION 1: Profile Info ─── -->
-      <section class="cf-card mb-5" aria-labelledby="profile-heading">
-
+      <!-- ─── SECTION 1: Notifications ─── -->
+      <section class="cf-card mb-5" aria-labelledby="notif-heading">
+        
         <div class="cf-card-header">
-          <div class="cf-card-icon cf-card-icon--orange">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path stroke-linecap="round" d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          <div class="cf-card-icon cf-card-icon--cyan">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
           </div>
           <div>
-            <h2 id="profile-heading" class="text-sm font-semibold text-text-primary">Profile</h2>
-            <p class="text-xs text-text-muted mt-0.5">Update your account profile information and email address.</p>
+            <h2 id="notif-heading" class="text-sm font-semibold text-text-primary">Alerts & Newsletters</h2>
+            <p class="text-xs text-text-muted mt-0.5">Choose what types of notifications you receive from our platform.</p>
           </div>
         </div>
 
         <div class="cf-card-body cf-card-body--spaced">
-
-          <!-- Avatar row -->
-          <div class="flex items-center gap-4">
-            <div class="cf-avatar cf-avatar--lg">CJ</div>
+          
+          <!-- Item 1 -->
+          <label class="flex items-start gap-4 cursor-pointer group">
+            <input type="checkbox" checked class="mt-1 w-4 h-4 text-corefinity-orange rounded border-surface-border focus:ring-corefinity-cyan accent-corefinity-orange" />
             <div>
-              <p class="text-sm font-semibold text-text-primary">Catherine Jarosz</p>
-              <p class="text-xs text-text-muted mt-0.5">Manager · example@corefinity.com</p>
-              <button type="button" class="mt-2 text-xs text-corefinity-cyan hover:text-corefinity-blue font-medium transition-colors">Change avatar</button>
+              <p class="text-sm font-medium text-text-primary group-hover:text-corefinity-blue transition-colors">Emergency Alerts</p>
+              <p class="text-xs text-text-secondary mt-1 leading-relaxed">Receive emergency alerts in regards to security and/or availability of the environments you are subscribed to.</p>
             </div>
-          </div>
-
+          </label>
           <div class="cf-divider"></div>
 
-          <!-- Full Name -->
-          <div>
-            <label for="name" class="cf-label">Full Name <span class="text-red-400" aria-hidden="true">*</span></label>
-            <input id="name" name="name" type="text" value="Example user" autocomplete="name" required
-              class="cf-input"
-              placeholder="Your full name" />
-          </div>
-
-          <!-- Email -->
-          <div>
-            <label for="email" class="cf-label">Email Address <span class="text-red-400" aria-hidden="true">*</span></label>
-            <div class="cf-input-group">
-              <svg class="cf-input-group-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-              <input id="email" name="email" type="email" value="example@corefinity.com" autocomplete="email" required
-                class="cf-input"
-                placeholder="you@example.com" />
+          <!-- Item 2 -->
+          <label class="flex items-start gap-4 cursor-pointer group">
+            <input type="checkbox" checked class="mt-1 w-4 h-4 text-corefinity-orange rounded border-surface-border focus:ring-corefinity-cyan accent-corefinity-orange" />
+            <div>
+              <p class="text-sm font-medium text-text-primary group-hover:text-corefinity-blue transition-colors">Maintenance window</p>
+              <p class="text-xs text-text-secondary mt-1 leading-relaxed">Receive notifications when a maintenance window is scheduled/created/completed.</p>
             </div>
-          </div>
+          </label>
+          <div class="cf-divider"></div>
 
-          <!-- Position -->
-          <div>
-            <label for="position" class="cf-label">Position</label>
-            <input id="position" name="position" type="text" value="Manager" autocomplete="organization-title"
-              class="cf-input"
-              placeholder="e.g. Manager, Developer" />
-            <p class="cf-helper">Your role or job title within the organisation.</p>
-          </div>
-        </div>
+          <!-- Item 3 -->
+          <label class="flex items-start gap-4 cursor-pointer group">
+            <input type="checkbox" checked class="mt-1 w-4 h-4 text-corefinity-orange rounded border-surface-border focus:ring-corefinity-cyan accent-corefinity-orange" />
+            <div>
+              <p class="text-sm font-medium text-text-primary group-hover:text-corefinity-blue transition-colors">Monitoring Alerts</p>
+              <p class="text-xs text-text-secondary mt-1 leading-relaxed">Receive alerts when monitored services is down.</p>
+            </div>
+          </label>
+          <div class="cf-divider"></div>
 
-        <div class="cf-card-footer">
-          <button type="button" class="cf-btn cf-btn--ghost">Cancel</button>
-          <button type="button" class="cf-btn cf-btn--orange" onclick="showToast('Profile saved successfully!')">
-            Save Changes
-          </button>
+          <!-- Item 4 -->
+          <label class="flex items-start gap-4 cursor-pointer group">
+            <input type="checkbox" checked class="mt-1 w-4 h-4 text-corefinity-orange rounded border-surface-border focus:ring-corefinity-cyan accent-corefinity-orange" />
+            <div>
+              <p class="text-sm font-medium text-text-primary group-hover:text-corefinity-blue transition-colors">Deployment Alerts</p>
+              <p class="text-xs text-text-secondary mt-1 leading-relaxed">Receive notifications on deployment completion or failure.</p>
+            </div>
+          </label>
+          <div class="cf-divider"></div>
+
+          <!-- Item 5 -->
+          <label class="flex items-start gap-4 cursor-pointer group">
+            <input type="checkbox" checked class="mt-1 w-4 h-4 text-corefinity-orange rounded border-surface-border focus:ring-corefinity-cyan accent-corefinity-orange" />
+            <div>
+              <p class="text-sm font-medium text-text-primary group-hover:text-corefinity-blue transition-colors">Newsletters</p>
+              <p class="text-xs text-text-secondary mt-1 leading-relaxed">Receive notifications around new features, functionalities and special offers.</p>
+            </div>
+          </label>
+
         </div>
       </section>
 
-      <!-- ─── SECTION 2: Mobile Number ─── -->
-      <section class="cf-card mb-5" aria-labelledby="mobile-heading">
-
-        <div class="cf-card-header">
-          <div class="cf-card-icon cf-card-icon--cyan">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-          </div>
-          <div>
-            <h2 id="mobile-heading" class="text-sm font-semibold text-text-primary">Mobile Number</h2>
-            <p class="text-xs text-text-muted mt-0.5">Used for two-factor authentication and account alerts.</p>
-          </div>
-        </div>
-
-        <div class="cf-card-body">
-          <label for="mobile" class="cf-label">Phone Number</label>
-          <div class="flex gap-2">
-            <!-- Country code -->
-            <div class="relative flex-shrink-0">
-              <select id="countryCode" aria-label="Country code" class="cf-select">
-                <option value="+44">🇬🇧 +44</option>
-                <option value="+1">🇺🇸 +1</option>
-                <option value="+61">🇦🇺 +61</option>
-                <option value="+49">🇩🇪 +49</option>
-                <option value="+33">🇫🇷 +33</option>
-                <option value="+81">🇯🇵 +81</option>
-                <option value="+62">🇮🇩 +62</option>
-              </select>
-              <svg class="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-text-muted pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-            </div>
-            <!-- Number input -->
-            <input id="mobile" name="mobile" type="tel" autocomplete="tel"
-              class="cf-input flex-1"
-              placeholder="7700 900 000" />
-          </div>
-          <p class="cf-helper flex items-center gap-1.5 mt-2">
-            <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" d="M12 8v4m0 4h.01"/></svg>
-            Enter your number in international format, including the country code.
-          </p>
-        </div>
-
-        <div class="cf-card-footer">
-          <button type="button" class="cf-btn cf-btn--ghost">Cancel</button>
-          <button type="button" class="cf-btn cf-btn--cyan" onclick="showToast('Mobile number updated!')">
-            Update
-          </button>
-        </div>
-      </section>
-
-      <!-- ─── SECTION 3: Update Password ─── -->
-      <section class="cf-card mb-5" aria-labelledby="password-heading">
+      <!-- ─── SECTION 2: Ticket Default Subscriptions ─── -->
+      <section class="cf-card mb-5" aria-labelledby="subscriptions-heading">
 
         <div class="cf-card-header">
           <div class="cf-card-icon cf-card-icon--blue">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
           </div>
           <div>
-            <h2 id="password-heading" class="text-sm font-semibold text-text-primary">Update Password</h2>
-            <p class="text-xs text-text-muted mt-0.5">Ensure your account is using a long, random password to stay secure.</p>
+            <h2 id="subscriptions-heading" class="text-sm font-semibold text-text-primary">Ticket Default Subscriptions</h2>
+            <p class="text-xs text-text-muted mt-0.5">Manage which tickets you automatically subscribe to.</p>
           </div>
         </div>
 
         <div class="cf-card-body cf-card-body--spaced">
+          
+          <div class="cf-alert cf-alert--info mb-2 text-sm">
+            <p>Select which companies' tickets you would like to be subscribed to automatically. This setting can be overridden on a per ticket basis using the subscribers section on the ticket page. You will always be subscribed to tickets you have raised, regardless of selections below.</p>
+          </div>
 
-          <!-- Current Password -->
           <div>
-            <label for="currentPassword" class="cf-label">Current Password <span class="text-red-400" aria-hidden="true">*</span></label>
-            <div class="cf-input-group relative">
-              <input id="currentPassword" name="currentPassword" type="password" autocomplete="current-password" required
-                class="cf-input cf-input--pr"
-                placeholder="Enter current password" />
-              <button type="button" class="cf-pw-toggle" aria-label="Show password" onclick="cfTogglePw('currentPassword', this)">
-                <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-              </button>
+            <p class="text-sm font-bold text-text-primary mb-3">Your Company:</p>
+            <label class="flex items-center gap-3 cursor-pointer group">
+              <input type="checkbox" checked class="w-4 h-4 text-corefinity-orange rounded border-surface-border focus:ring-corefinity-cyan accent-corefinity-orange" />
+              <span class="text-sm font-medium text-text-primary group-hover:text-corefinity-blue transition-colors">Example Agency</span>
+            </label>
+          </div>
+
+          <div class="mt-2">
+            <div class="flex items-center gap-3 justify-between mb-3">
+              <p class="text-sm text-text-secondary">Inherited companies:</p>
+              <button type="button" class="text-xs font-semibold text-text-muted underline hover:text-corefinity-blue transition-colors" x-data="{ all: true }" @click="all = !all; $el.parentElement.nextElementSibling.querySelectorAll('input').forEach(i => i.checked = all)">Select / Unselect All</button>
+            </div>
+            
+            <div class="ml-7 space-y-3">
+              <label class="flex items-center gap-3 cursor-pointer group">
+                <input type="checkbox" checked class="w-4 h-4 text-corefinity-orange rounded border-surface-border focus:ring-corefinity-cyan accent-corefinity-orange" />
+                <span class="text-sm font-medium text-text-primary group-hover:text-corefinity-blue transition-colors">Example Company</span>
+              </label>
             </div>
           </div>
 
-          <!-- New Password -->
-          <div>
-            <label for="newPassword" class="cf-label">New Password <span class="text-red-400" aria-hidden="true">*</span></label>
-            <div class="cf-input-group relative">
-              <input id="newPassword" name="newPassword" type="password" autocomplete="new-password" required
-                class="cf-input cf-input--pr"
-                placeholder="Enter new password"
-                oninput="cfCheckStrength(this.value)" />
-              <button type="button" class="cf-pw-toggle" aria-label="Show password" onclick="cfTogglePw('newPassword', this)">
-                <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-              </button>
-            </div>
-            <!-- Strength meter -->
-            <div class="cf-strength-bars">
-              <div class="cf-strength-bar"></div>
-              <div class="cf-strength-bar"></div>
-              <div class="cf-strength-bar"></div>
-              <div class="cf-strength-bar"></div>
-            </div>
-            <p class="cf-helper" id="cf-strength-label">Use 8+ characters with a mix of letters, numbers &amp; symbols.</p>
-          </div>
-
-          <!-- Confirm Password -->
-          <div>
-            <label for="confirmPassword" class="cf-label">Confirm Password <span class="text-red-400" aria-hidden="true">*</span></label>
-            <div class="cf-input-group relative">
-              <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" required
-                class="cf-input cf-input--pr"
-                placeholder="Re-enter new password" />
-              <button type="button" class="cf-pw-toggle" aria-label="Show password" onclick="cfTogglePw('confirmPassword', this)">
-                <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-              </button>
-            </div>
-          </div>
-
-          <!-- Security tip -->
-          <div class="cf-alert cf-alert--warning">
-            <svg class="w-4 h-4 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-            <p>Use a password manager to generate a strong, unique password. Never reuse passwords across services.</p>
-          </div>
         </div>
 
         <div class="cf-card-footer">
-          <button type="button" class="cf-btn cf-btn--ghost">Cancel</button>
-          <button type="button" class="cf-btn cf-btn--blue" onclick="showToast('Password updated successfully!')">
-            Update Password
-          </button>
-        </div>
-      </section>
-
-      <!-- ─── SECTION 4: Danger Zone ─── -->
-      <section class="cf-card" style="border-color: #fecaca;" aria-labelledby="danger-heading">
-
-        <div class="cf-card-header" style="border-color: #fecaca; background: linear-gradient(to right, #fff5f5, #fff);">
-          <div class="cf-card-icon cf-card-icon--red">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-          </div>
-          <div>
-            <h2 id="danger-heading" class="text-sm font-semibold text-red-600">Danger Zone</h2>
-            <p class="text-xs text-text-muted mt-0.5">Irreversible and destructive actions.</p>
-          </div>
-        </div>
-
-        <div class="cf-card-body flex items-center justify-between gap-4 flex-wrap">
-          <div>
-            <p class="text-sm font-medium text-text-primary">Delete Account</p>
-            <p class="text-xs text-text-muted mt-0.5">Permanently delete your account and all associated data. This cannot be undone.</p>
-          </div>
-          <button type="button" class="cf-btn cf-btn--danger flex-shrink-0">
-            Delete Account
+          <button type="button" class="cf-btn cf-btn--orange" onclick="showToast('Notification settings saved!')">
+            Save
           </button>
         </div>
       </section>
 
       <p class="text-xs text-text-muted text-center mt-8 pb-4">
-        Corefinity Control Panel ·
-        <a href="#" class="hover:text-corefinity-blue transition-colors">Privacy Policy</a> ·
+        Corefinity Control Panel &middot;
+        <a href="#" class="hover:text-corefinity-blue transition-colors">Privacy Policy</a> &middot;
         <a href="#" class="hover:text-corefinity-blue transition-colors">Terms</a>
       </p>
     </main>
