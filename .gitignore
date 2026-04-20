@@ -1,1 +1,9 @@
 .blackboxcli/
+.agents/
+.claude/
+.factory/
+.qwen/
+old design/
+scratch/
+skills/
+videos/
