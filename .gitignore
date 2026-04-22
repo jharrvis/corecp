@@ -2,3 +2,9 @@
 /*/
 !/assets/
 !/assets/**
+
+# Ignore design documents and duplicate HTML files
+Control panel redesign images.pdf
+Control panel redesign images.docx
+user-profile - Copy.html
+user-profile - Copy (2).html
