@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>User Profile — Corefinity</title>
+  <title>User Profile â€” Corefinity</title>
   <meta name="description" content="Manage your Corefinity account profile, security settings, and API access." />
 
   <!-- Tailwind CDN + custom tokens -->
@@ -56,9 +56,7 @@
 </head>
 <body class="text-text-primary antialiased min-h-screen" x-data>
 
-  <!-- ═══════════════════════════════════════════════════════════════════
-       TOP NAVIGATION BAR
-  ═══════════════════════════════════════════════════════════════════ -->
+  <!-- Top Navigation Bar -->
   <header class="cf-header">
 
     <!-- Mobile hamburger (md:hidden) -->
@@ -77,7 +75,7 @@
       </div>
     </a>
 
-    <!-- Desktop sidebar toggle — samping logo, sebelum search bar -->
+    <!-- Desktop sidebar toggle â€” samping logo, sebelum search bar -->
     <button
       class="cf-sidebar-toggle"
       :class="{ 'is-collapsed': !$store.sidebar.open }"
@@ -100,7 +98,7 @@
         <input
           type="search"
           readonly
-          placeholder="Search pages & settings…"
+          placeholder="Search pages & settingsâ€¦"
           aria-label="Search"
           tabindex="-1"
           class="w-full bg-surface-bg border border-surface-border rounded-xl pl-9 pr-16 py-2 text-sm text-text-muted placeholder-text-muted focus:outline-none transition-all" />
@@ -183,7 +181,7 @@
           </div>
 
           <div class="px-4 py-3 border-t border-surface-border bg-surface-bg">
-            <a href="#" class="text-sm font-medium text-corefinity-blue hover:text-corefinity-cyan transition-colors" role="menuitem">View all notifications →</a>
+            <a href="#" class="text-sm font-medium text-corefinity-blue hover:text-corefinity-cyan transition-colors" role="menuitem">View all notifications â†’</a>
           </div>
         </div>
       </div>
@@ -230,14 +228,10 @@
     </div>
   </header>
 
-  <!-- ═══════════════════════════════════════════════════════════════════
-       LAYOUT (below fixed header)
-  ═══════════════════════════════════════════════════════════════════ -->
+  <!-- Layout (below fixed header) -->
   <div class="cf-layout">
 
-    <!-- ═══════════════════════════════════════════════════════════════
-         SIDEBAR
-    ═══════════════════════════════════════════════════════════════ -->
+    <!-- Sidebar -->
     <aside
       id="sidebar"
       class="cf-sidebar bg-white border-r border-surface-border"
@@ -330,9 +324,7 @@
       style="display:none">
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════════════
-         MAIN CONTENT
-    ═══════════════════════════════════════════════════════════════ -->
+    <!-- Main Content -->
     <main class="cf-main px-4 sm:px-6 lg:px-8 py-8 max-w-3xl w-full">
 
       <!-- Page header -->
@@ -346,7 +338,7 @@
         <p class="cf-page-desc">Manage your personal information and account security settings.</p>
       </div>
 
-      <!-- ─── SECTION 1: Profile Info ─── -->
+      <!-- â”€â”€â”€ SECTION 1: Profile Info â”€â”€â”€ -->
       <section class="cf-card mb-5" aria-labelledby="profile-heading">
 
         <div class="cf-card-header">
@@ -366,7 +358,7 @@
             <div class="cf-avatar cf-avatar--lg">CJ</div>
             <div>
               <p class="text-sm font-semibold text-text-primary">Catherine Jarosz</p>
-              <p class="text-xs text-text-muted mt-0.5">Manager · example@corefinity.com</p>
+              <p class="text-xs text-text-muted mt-0.5">Manager Â· example@corefinity.com</p>
               <button type="button" class="mt-2 text-xs text-corefinity-cyan hover:text-corefinity-blue font-medium transition-colors">Change avatar</button>
             </div>
           </div>
@@ -410,7 +402,7 @@
         </div>
       </section>
 
-      <!-- ─── SECTION 2: Mobile Number ─── -->
+      <!-- â”€â”€â”€ SECTION 2: Mobile Number â”€â”€â”€ -->
       <section class="cf-card mb-5" aria-labelledby="mobile-heading">
 
         <div class="cf-card-header">
@@ -429,13 +421,13 @@
             <!-- Country code -->
             <div class="relative flex-shrink-0">
               <select id="countryCode" aria-label="Country code" class="cf-select">
-                <option value="+44">🇬🇧 +44</option>
-                <option value="+1">🇺🇸 +1</option>
-                <option value="+61">🇦🇺 +61</option>
-                <option value="+49">🇩🇪 +49</option>
-                <option value="+33">🇫🇷 +33</option>
-                <option value="+81">🇯🇵 +81</option>
-                <option value="+62">🇮🇩 +62</option>
+                <option value="+44">ðŸ‡¬ðŸ‡§ +44</option>
+                <option value="+1">ðŸ‡ºðŸ‡¸ +1</option>
+                <option value="+61">ðŸ‡¦ðŸ‡º +61</option>
+                <option value="+49">ðŸ‡©ðŸ‡ª +49</option>
+                <option value="+33">ðŸ‡«ðŸ‡· +33</option>
+                <option value="+81">ðŸ‡¯ðŸ‡µ +81</option>
+                <option value="+62">ðŸ‡®ðŸ‡© +62</option>
               </select>
               <svg class="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-text-muted pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </div>
@@ -458,7 +450,7 @@
         </div>
       </section>
 
-      <!-- ─── SECTION 3: Update Password ─── -->
+      <!-- â”€â”€â”€ SECTION 3: Update Password â”€â”€â”€ -->
       <section class="cf-card mb-5" aria-labelledby="password-heading">
 
         <div class="cf-card-header">
@@ -536,7 +528,7 @@
         </div>
       </section>
 
-      <!-- ─── SECTION 4: Danger Zone ─── -->
+      <!-- â”€â”€â”€ SECTION 4: Danger Zone â”€â”€â”€ -->
       <section class="cf-card" style="border-color: #fecaca;" aria-labelledby="danger-heading">
 
         <div class="cf-card-header" style="border-color: #fecaca; background: linear-gradient(to right, #fff5f5, #fff);">
@@ -561,16 +553,14 @@
       </section>
 
       <p class="text-xs text-text-muted text-center mt-8 pb-4">
-        Corefinity Control Panel ·
-        <a href="#" class="hover:text-corefinity-blue transition-colors">Privacy Policy</a> ·
+        Corefinity Control Panel Â·
+        <a href="#" class="hover:text-corefinity-blue transition-colors">Privacy Policy</a> Â·
         <a href="#" class="hover:text-corefinity-blue transition-colors">Terms</a>
       </p>
     </main>
   </div><!-- /.cf-layout -->
 
-  <!-- ═══════════════════════════════════════════════════════════════════
-       TOAST NOTIFICATION
-  ═══════════════════════════════════════════════════════════════════ -->
+  <!-- Toast Notification -->
   <div
     class="cf-toast"
     :class="{ 'is-visible': $store.toast.visible }"
@@ -583,9 +573,7 @@
     <span x-text="$store.toast.message">Saved!</span>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════════════
-       GLOBAL SEARCH MODAL
-  ═══════════════════════════════════════════════════════════════════ -->
+  <!-- Global Search Modal -->
   <div
     x-show="$store.globalSearch.isOpen"
     class="cf-search-overlay"
@@ -619,7 +607,7 @@
           id="cf-search-input"
           class="cf-search-modal-input"
           type="search"
-          placeholder="Search pages, settings &amp; actions…"
+          placeholder="Search pages, settings &amp; actionsâ€¦"
           autocomplete="off"
           spellcheck="false"
           x-model="$store.globalSearch.query"
@@ -700,8 +688,8 @@
 
       <!-- Footer hints -->
       <div class="cf-search-footer">
-        <span class="cf-search-hint"><kbd class="cf-kbd">↑↓</kbd> Navigate</span>
-        <span class="cf-search-hint"><kbd class="cf-kbd">↵</kbd> Open</span>
+        <span class="cf-search-hint"><kbd class="cf-kbd">â†‘â†“</kbd> Navigate</span>
+        <span class="cf-search-hint"><kbd class="cf-kbd">â†µ</kbd> Open</span>
         <span class="cf-search-hint"><kbd class="cf-kbd">esc</kbd> Close</span>
         <span class="cf-search-hint ml-auto opacity-70"><kbd class="cf-kbd">/</kbd> to search</span>
       </div>

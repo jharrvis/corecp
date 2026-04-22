@@ -62,7 +62,7 @@
 
 <body class="text-text-primary antialiased min-h-screen" x-data>
 
-       TOP NAVIGATION BAR
+  <!-- Top Navigation Bar -->
   <header class="cf-header">
 
     <!-- Mobile hamburger (md:hidden) -->
@@ -489,7 +489,7 @@
 
   </div><!-- /.cf-layout -->
 
-       TOAST NOTIFICATION
+  <!-- Toast Notification -->
   <div class="cf-toast" :class="{ 'is-visible': $store.toast.visible }" role="status" aria-live="polite"
     aria-atomic="true">
     <div class="cf-toast-check" aria-hidden="true">
@@ -500,7 +500,7 @@
     <span x-text="$store.toast.message">Saved!</span>
   </div>
 
-       GLOBAL SEARCH MODAL
+  <!-- Global Search Modal -->
   <div x-show="$store.globalSearch.isOpen" class="cf-search-overlay" @click.self="$store.globalSearch.close()"
     x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
     x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150"
@@ -601,7 +601,7 @@
     </div>
   </div>
 
-       DELETE ENVIRONMENT CONFIRMATION MODAL
+  <!-- Delete Environment Confirmation Modal -->
   <!-- This is scoped to the main x-data, so we use a separate Alpine component -->
   <div x-data="{ show: false }" x-init="$watch('$store', () => {})" @open-delete.window="show = true"
     style="display:none" x-show="show" class="fixed inset-0 z-[60] flex items-center justify-center p-4"
@@ -635,7 +635,7 @@
     </div>
   </div>
 
-       EDIT ENVIRONMENT MODAL
+  <!-- Edit Environment Modal -->
   <div x-data="{ show: false }" @open-edit.window="show = true" style="display:none" x-show="show"
     class="fixed inset-0 z-[60] flex items-center justify-center p-4"
     x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"

@@ -8,6 +8,13 @@
   usingSharedEnv: 'Disabled',
   slackChannel: '#LE_deployment',
   useDefaultSlack: true,
+  actionMenuOpen: false,
+  selectedAction: 'Select Action',
+  actionOptions: ['Deployment', 'Deploy Commit'],
+  selectAction(action) {
+    this.selectedAction = action;
+    this.actionMenuOpen = false;
+  },
   repos: [
     { id: 1, pipeline: 'Laravel', provider: 'GitLab', url: 'user/myrepo/functions', branch: 'main', path: '/' }
   ],
@@ -241,12 +248,43 @@
             <circle cx="12" cy="12" r="10"/><path stroke-linecap="round" d="M12 8v4m0 4h.01"/>
           </svg>
         </button>
-        <select class="cf-select text-sm h-9">
-          <option>Select Action</option>
-          <option>Retry All Failed</option>
-          <option>Delete Selected</option>
-        </select>
-        <button type="button" class="h-9 px-3 rounded-lg bg-corefinity-orange text-white text-sm font-semibold hover:bg-[#e05e00] transition-colors">
+        <div class="relative" @click.outside="actionMenuOpen = false">
+          <button
+            type="button"
+            @click="actionMenuOpen = !actionMenuOpen"
+            class="h-9 min-w-[190px] rounded-xl border border-surface-border bg-white px-3 text-left text-sm font-medium text-text-secondary shadow-sm hover:bg-surface-elevated transition-colors"
+            :aria-expanded="actionMenuOpen ? 'true' : 'false'">
+            <span x-text="selectedAction"></span>
+          </button>
+          <div
+            x-show="actionMenuOpen"
+            x-transition
+            style="display:none"
+            class="absolute left-0 top-[calc(100%+6px)] z-50 w-full rounded-xl border border-surface-border bg-white p-1.5 shadow-xl">
+            <button
+              type="button"
+              @click="selectAction('Select Action')"
+              class="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-sm text-text-muted hover:bg-surface-elevated transition-colors">
+              <span class="inline-flex w-4 justify-center text-text-muted" x-show="selectedAction === 'Select Action'">✓</span>
+              <span class="inline-flex w-4 justify-center text-transparent" x-show="selectedAction !== 'Select Action'">✓</span>
+              <span>Select Action</span>
+            </button>
+            <template x-for="action in actionOptions" :key="action">
+              <button
+                type="button"
+                @click="selectAction(action)"
+                class="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-sm font-semibold text-text-primary hover:bg-surface-elevated transition-colors">
+                <span class="inline-flex w-4 justify-center text-corefinity-blue" x-show="selectedAction === action">✓</span>
+                <span class="inline-flex w-4 justify-center text-transparent" x-show="selectedAction !== action">✓</span>
+                <span x-text="action"></span>
+              </button>
+            </template>
+          </div>
+        </div>
+        <button type="button"
+          :disabled="selectedAction === 'Select Action'"
+          :class="selectedAction === 'Select Action' ? 'bg-slate-300 cursor-not-allowed' : 'bg-corefinity-orange hover:bg-[#e05e00]'"
+          class="h-9 px-3 rounded-lg text-white text-sm font-semibold transition-colors">
           <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
         </button>
       </div>
