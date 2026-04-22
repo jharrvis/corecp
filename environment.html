@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>User Profile â€” Corefinity</title>
+  <title>User Profile - Corefinity</title>
   <meta name="description" content="Manage your Corefinity account profile, security settings, and API access." />
 
   <!-- Tailwind CDN + custom tokens -->
@@ -62,9 +62,7 @@
 
 <body class="text-text-primary antialiased min-h-screen" x-data>
 
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        TOP NAVIGATION BAR
-  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <header class="cf-header">
 
     <!-- Mobile hamburger (md:hidden) -->
@@ -83,7 +81,7 @@
       </div>
     </a>
 
-    <!-- Desktop sidebar toggle â€” samping logo, sebelum search bar -->
+    <!-- Desktop sidebar toggle - samping logo, sebelum search bar -->
     <button class="cf-sidebar-toggle" :class="{ 'is-collapsed': !$store.sidebar.open }"
       :title="$store.sidebar.open ? 'Collapse sidebar' : 'Expand sidebar'" aria-label="Toggle sidebar"
       @click="$store.sidebar.toggle()">
@@ -104,7 +102,7 @@
           <circle cx="11" cy="11" r="8" />
           <path stroke-linecap="round" d="M21 21l-4.35-4.35" />
         </svg>
-        <input type="search" readonly placeholder="Search pages & settingsâ€¦" aria-label="Search" tabindex="-1"
+        <input type="search" readonly placeholder="Search pages & settings..." aria-label="Search" tabindex="-1"
           class="w-full bg-surface-bg border border-surface-border rounded-xl pl-9 pr-16 py-2 text-sm text-text-muted placeholder-text-muted focus:outline-none transition-all" />
         <kbd class="cf-kbd absolute right-3 top-1/2 -translate-y-1/2">/</kbd>
       </div>
@@ -172,8 +170,8 @@
                 </svg>
               </div>
               <div class="min-w-0 text-left">
-                <p class="text-sm font-medium text-text-primary">Contest deadline updated</p>
-                <p class="text-xs text-text-secondary mt-0.5">Submission for Spring Hackathon closes tomorrow.</p>
+                <p class="text-sm font-medium text-text-primary">High CPU usage detected</p>
+                <p class="text-xs text-text-secondary mt-0.5">Environment production-web exceeded 85% CPU for 10 minutes.</p>
                 <p class="text-[11px] text-text-muted mt-1">2 minutes ago</p>
               </div>
             </button>
@@ -186,8 +184,8 @@
                 </svg>
               </div>
               <div class="min-w-0 text-left">
-                <p class="text-sm font-medium text-text-primary">New team submission received</p>
-                <p class="text-xs text-text-secondary mt-0.5">Team Aurora uploaded revision 3.</p>
+                <p class="text-sm font-medium text-text-primary">Automated backup completed</p>
+                <p class="text-xs text-text-secondary mt-0.5">Daily backup for db-cluster-01 completed successfully.</p>
                 <p class="text-[11px] text-text-muted mt-1">18 minutes ago</p>
               </div>
             </button>
@@ -199,8 +197,8 @@
                 </svg>
               </div>
               <div class="min-w-0 text-left">
-                <p class="text-sm font-medium text-text-primary">Weekly report is ready</p>
-                <p class="text-xs text-text-secondary mt-0.5">Your activity summary is available in the dashboard.</p>
+                <p class="text-sm font-medium text-text-primary">SSL certificate expires soon</p>
+                <p class="text-xs text-text-secondary mt-0.5">api.corecp.net certificate will expire in 7 days.</p>
                 <p class="text-[11px] text-text-muted mt-1">1 hour ago</p>
               </div>
             </button>
@@ -208,7 +206,7 @@
 
           <div class="px-4 py-3 border-t border-surface-border bg-surface-bg">
             <a href="#" class="text-sm font-medium text-corefinity-blue hover:text-corefinity-cyan transition-colors"
-              role="menuitem">View all notifications â†’</a>
+              role="menuitem">View all notifications -></a>
           </div>
         </div>
       </div>
@@ -267,14 +265,8 @@
     </div>
   </header>
 
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-       LAYOUT (below fixed header)
-  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div class="cf-layout">
 
-    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-         SIDEBAR
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <aside id="sidebar" class="cf-sidebar bg-surface-card border-r border-surface-border" :class="{
         'cf-sidebar--collapsed':     !$store.sidebar.open,
         'cf-sidebar--mobile-open':   $store.mobileSidebar.open
@@ -391,9 +383,6 @@
       x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" aria-hidden="true" style="display:none">
     </div>
 
-    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-         MAIN CONTENT
-    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <main class="cf-main px-4 sm:px-6 lg:px-8 py-6 max-w-[1400px] w-full" x-data="environmentPage()" x-init="init()">
 
       <!-- Page header -->
@@ -416,7 +405,7 @@
       <!-- MAIN ENVIRONMENT CARD -->
       <div class="cf-card overflow-visible">
 
-        <!-- â”€â”€ Card Top: Title + Action Toolbar â”€â”€ -->
+        <!-- -- Card Top: Title + Action Toolbar -- -->
         <div
           class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-5 py-3.5 border-b border-surface-border">
           <h2 class="text-lg font-bold text-corefinity-blue">Environment Info</h2>
@@ -480,7 +469,7 @@
           </div>
         </div>
 
-        <!-- â”€â”€ Tab Navigation â”€â”€ -->
+        <!-- -- Tab Navigation -- -->
         <div class="overflow-x-auto border-b border-surface-border">
           <nav class="flex min-w-max px-2" aria-label="Environment tabs" role="tablist">
             <template x-for="tab in tabs" :key="tab">
@@ -500,9 +489,7 @@
 
   </div><!-- /.cf-layout -->
 
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        TOAST NOTIFICATION
-  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div class="cf-toast" :class="{ 'is-visible': $store.toast.visible }" role="status" aria-live="polite"
     aria-atomic="true">
     <div class="cf-toast-check" aria-hidden="true">
@@ -513,9 +500,7 @@
     <span x-text="$store.toast.message">Saved!</span>
   </div>
 
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        GLOBAL SEARCH MODAL
-  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div x-show="$store.globalSearch.isOpen" class="cf-search-overlay" @click.self="$store.globalSearch.close()"
     x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
     x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150"
@@ -536,7 +521,7 @@
           <path stroke-linecap="round" d="M21 21l-4.35-4.35" />
         </svg>
         <input id="cf-search-input" class="cf-search-modal-input" type="search"
-          placeholder="Search pages, settings &amp; actionsâ€¦" autocomplete="off" spellcheck="false"
+          placeholder="Search pages, settings &amp; actions..." autocomplete="off" spellcheck="false"
           x-model="$store.globalSearch.query" @keydown.escape.stop="$store.globalSearch.close()"
           @keydown.arrow-down.prevent="$store.globalSearch.moveDown()"
           @keydown.arrow-up.prevent="$store.globalSearch.moveUp()"
@@ -608,17 +593,15 @@
 
       <!-- Footer hints -->
       <div class="cf-search-footer">
-        <span class="cf-search-hint"><kbd class="cf-kbd">â†‘â†“</kbd> Navigate</span>
-        <span class="cf-search-hint"><kbd class="cf-kbd">â†µ</kbd> Open</span>
+        <span class="cf-search-hint"><kbd class="cf-kbd">up/down</kbd> Navigate</span>
+        <span class="cf-search-hint"><kbd class="cf-kbd">enter</kbd> Open</span>
         <span class="cf-search-hint"><kbd class="cf-kbd">esc</kbd> Close</span>
         <span class="cf-search-hint ml-auto opacity-70"><kbd class="cf-kbd">/</kbd> to search</span>
       </div>
     </div>
   </div>
 
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        DELETE ENVIRONMENT CONFIRMATION MODAL
-  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <!-- This is scoped to the main x-data, so we use a separate Alpine component -->
   <div x-data="{ show: false }" x-init="$watch('$store', () => {})" @open-delete.window="show = true"
     style="display:none" x-show="show" class="fixed inset-0 z-[60] flex items-center justify-center p-4"
@@ -652,9 +635,7 @@
     </div>
   </div>
 
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        EDIT ENVIRONMENT MODAL
-  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div x-data="{ show: false }" @open-edit.window="show = true" style="display:none" x-show="show"
     class="fixed inset-0 z-[60] flex items-center justify-center p-4"
     x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
@@ -707,7 +688,7 @@
         <div>
           <label class="block text-xs font-semibold text-text-muted uppercase tracking-wider mb-1.5">Notes</label>
           <textarea rows="2" class="cf-input resize-none"
-            placeholder="Optional notes about this environmentâ€¦"></textarea>
+            placeholder="Optional notes about this environment..."></textarea>
         </div>
       </div>
       <!-- Modal Footer -->
@@ -739,11 +720,11 @@
           { name: 'alertmanager-kube-prometheus-stack-1756-alertmanager-0', node: '2-4545d92b-86np', nodeType: 'c4a-standard-16', ip: '10.52.2.156', age: '6mos', containers: '2/2', cpu: '1m', memory: '52428800m', restarts: '0', ready: true, status: 'Running' }
         ],
         nodes: [
-          { name: '1-4a631dbe-96dn', internalIp: '10.154.1.147', externalIp: 'â€”', version: 'v1.33.8-gke.1026000', kernelVersion: '6.6.113+', cpu: '6687m / 16000m (42%)', memory: '34954Mi / 64189Mi (59%)' },
-          { name: '1-a117bd32-732o', internalIp: '10.154.0.130', externalIp: 'â€”', version: 'v1.33.8-gke.1026000', kernelVersion: '6.6.113+', cpu: '3364m / 16000m (21%)', memory: '28056Mi / 64189Mi (47%)' },
-          { name: '1-4a631dbe-qd5c', internalIp: '10.154.0.61', externalIp: 'â€”', version: 'v1.33.8-gke.1026000', kernelVersion: '6.6.113+', cpu: '7263m / 16000m (45%)', memory: '37085Mi / 64189Mi (63%)' },
-          { name: '2-f5c2d627-tnhl', internalIp: '10.154.1.210', externalIp: 'â€”', version: 'v1.33.5-gke.2019000', kernelVersion: '6.6.113+', cpu: '10225m / 16000m (64%)', memory: '11710Mi / 128573Mi (98%)' },
-          { name: '2-f5c2d627-pdbm', internalIp: '10.154.1.231', externalIp: 'â€”', version: 'v1.33.5-gke.2019000', kernelVersion: '6.6.113+', cpu: '6457m / 16000m (40%)', memory: '110771Mi / 128573Mi (93%)' }
+          { name: '1-4a631dbe-96dn', internalIp: '10.154.1.147', externalIp: '-', version: 'v1.33.8-gke.1026000', kernelVersion: '6.6.113+', cpu: '6687m / 16000m (42%)', memory: '34954Mi / 64189Mi (59%)' },
+          { name: '1-a117bd32-732o', internalIp: '10.154.0.130', externalIp: '-', version: 'v1.33.8-gke.1026000', kernelVersion: '6.6.113+', cpu: '3364m / 16000m (21%)', memory: '28056Mi / 64189Mi (47%)' },
+          { name: '1-4a631dbe-qd5c', internalIp: '10.154.0.61', externalIp: '-', version: 'v1.33.8-gke.1026000', kernelVersion: '6.6.113+', cpu: '7263m / 16000m (45%)', memory: '37085Mi / 64189Mi (63%)' },
+          { name: '2-f5c2d627-tnhl', internalIp: '10.154.1.210', externalIp: '-', version: 'v1.33.5-gke.2019000', kernelVersion: '6.6.113+', cpu: '10225m / 16000m (64%)', memory: '11710Mi / 128573Mi (98%)' },
+          { name: '2-f5c2d627-pdbm', internalIp: '10.154.1.231', externalIp: '-', version: 'v1.33.5-gke.2019000', kernelVersion: '6.6.113+', cpu: '6457m / 16000m (40%)', memory: '110771Mi / 128573Mi (93%)' }
         ],
         tabContent: {},
         loadingTab: '',
