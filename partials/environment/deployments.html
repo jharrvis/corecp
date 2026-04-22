@@ -43,15 +43,18 @@
     <!-- Pipeline Status -->
     <div class="grid grid-cols-[260px_1fr] items-center gap-4 px-6 py-4 border-b border-surface-border/50">
       <span class="text-sm font-semibold text-text-secondary">Deployment Pipeline Status</span>
-      <div class="flex items-center gap-4">
-        <span class="text-sm font-semibold text-green-500">Enabled</span>
-        <button type="button" @click="pipelineEnabled = !pipelineEnabled"
-          class="rounded-md bg-red-500/10 border border-red-400/30 px-4 py-1.5 text-xs font-semibold text-red-500 hover:bg-red-500/20 transition-colors">
-          Disable Deployment Pipeline
+      <div class="flex items-center gap-4 flex-wrap">
+        <span class="text-sm font-semibold" :class="pipelineEnabled ? 'text-green-500' : 'text-red-500'" x-text="pipelineEnabled ? 'Enabled' : 'Disabled'"></span>
+        <button type="button" role="switch" :aria-checked="pipelineEnabled ? 'true' : 'false'" @click="pipelineEnabled = !pipelineEnabled"
+          class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
+          :class="pipelineEnabled ? 'bg-corefinity-cyan' : 'bg-slate-300'">
+          <span class="inline-block h-5 w-5 transform rounded-full bg-white transition-transform" :class="pipelineEnabled ? 'translate-x-5' : 'translate-x-1'"></span>
         </button>
+        <span class="text-xs text-text-muted" x-show="!pipelineEnabled" style="display:none">Pipeline is disabled. Automatic deployments are paused.</span>
       </div>
     </div>
 
+    <fieldset :disabled="!pipelineEnabled" :class="!pipelineEnabled ? 'opacity-60' : ''" class="min-w-0">
     <!-- Deployment Source -->
     <div class="grid grid-cols-[260px_1fr] items-center gap-4 px-6 py-4 border-b border-surface-border/50">
       <span class="text-sm font-semibold text-text-secondary">Deployment Source</span>
@@ -206,6 +209,7 @@
       <span class="text-sm font-semibold text-text-secondary">Base Image Repository Path Configuration</span>
       <span class="text-sm text-text-secondary">From Global Config <span class="text-text-muted">(europe-west2-docker.pkg.dev/corefinity/base)</span></span>
     </div>
+    </fieldset>
   </div>
 
   <!-- ── Deployments Table ────────────────────────────────────────── -->
