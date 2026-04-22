@@ -748,18 +748,18 @@
         tabContent: {},
         loadingTab: '',
         tabPartials: {
-          General: 'assets/partials/environment/general.html',
-          Pods: 'assets/partials/environment/pods.html',
-          Nodes: 'assets/partials/environment/nodes.html',
-          Deployments: 'assets/partials/environment/deployments.html',
-          Emails: 'assets/partials/environment/emails.html',
-          'Cache Warmer': 'assets/partials/environment/cache-warmer.html',
-          Actions: 'assets/partials/environment/actions.html',
-          Diagnostics: 'assets/partials/environment/diagnostics.html',
-          Autoscaler: 'assets/partials/environment/autoscaler.html',
-          Monitors: 'assets/partials/environment/monitors.html',
-          'Quick Actions': 'assets/partials/environment/quick-actions.html',
-          Firewall: 'assets/partials/environment/firewall.html'
+          General: 'partials/environment/general.html',
+          Pods: 'partials/environment/pods.html',
+          Nodes: 'partials/environment/nodes.html',
+          Deployments: 'partials/environment/deployments.html',
+          Emails: 'partials/environment/emails.html',
+          'Cache Warmer': 'partials/environment/cache-warmer.html',
+          Actions: 'partials/environment/actions.html',
+          Diagnostics: 'partials/environment/diagnostics.html',
+          Autoscaler: 'partials/environment/autoscaler.html',
+          Monitors: 'partials/environment/monitors.html',
+          'Quick Actions': 'partials/environment/quick-actions.html',
+          Firewall: 'partials/environment/firewall.html'
         },
         init() {
           this.loadTabContent(this.activeTab);
@@ -776,7 +776,7 @@
           `;
         },
         partialPath(tab) {
-          return this.tabPartials[tab] || 'assets/partials/environment/placeholder.html';
+          return this.tabPartials[tab] || 'partials/environment/placeholder.html';
         },
         async setActiveTab(tab) {
           this.activeTab = tab;

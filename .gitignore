@@ -2,6 +2,8 @@
 /*/
 !/assets/
 !/assets/**
+!/partials/
+!/partials/**
 
 # Ignore design documents and duplicate HTML files
 Control panel redesign images.pdf
