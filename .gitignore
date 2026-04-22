@@ -1,9 +1,4 @@
-.blackboxcli/
-.agents/
-.claude/
-.factory/
-.qwen/
-old design/
-scratch/
-skills/
-videos/
+# Ignore all top-level folders except assets
+/*/
+!/assets/
+!/assets/**
