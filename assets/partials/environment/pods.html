@@ -1,0 +1,75 @@
+<div>
+  <div class="border-b border-surface-border bg-surface-bg/70 px-6 py-4">
+    <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-wider text-corefinity-blue">Pods</p>
+        <h3 class="mt-1 text-lg font-bold text-text-primary">Kubernetes Pods</h3>
+        <p class="mt-1 text-sm text-text-secondary">Live workload inventory for application, monitoring, and support services.</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center gap-2 rounded-full bg-green-500/10 px-3 py-2 text-xs font-semibold text-green-600">
+          <span class="h-2 w-2 rounded-full bg-green-500"></span>
+          7 pods ready
+        </span>
+        <button type="button" class="inline-flex min-h-[40px] items-center gap-2 rounded-lg border border-surface-border bg-surface-card px-3 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-elevated hover:text-text-primary">
+          <svg class="h-4 w-4 text-corefinity-cyan" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 4h18M6 8h12M10 12h4M11 16h2" />
+          </svg>
+          Filter
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="min-w-[1380px] w-full text-sm">
+      <thead class="bg-surface-bg text-[11px] uppercase tracking-[0.16em] text-corefinity-blue">
+        <tr>
+          <th class="px-6 py-3 text-left font-bold">Name</th>
+          <th class="px-4 py-3 text-left font-bold">Node</th>
+          <th class="px-4 py-3 text-left font-bold">Node Type</th>
+          <th class="px-4 py-3 text-left font-bold">IP</th>
+          <th class="px-4 py-3 text-left font-bold">Age</th>
+          <th class="px-4 py-3 text-left font-bold">Containers</th>
+          <th class="px-4 py-3 text-left font-bold">CPU</th>
+          <th class="px-4 py-3 text-left font-bold">Memory</th>
+          <th class="px-4 py-3 text-left font-bold">Restarts</th>
+          <th class="px-4 py-3 text-left font-bold">Ready</th>
+          <th class="px-4 py-3 text-left font-bold">Status</th>
+          <th class="px-4 py-3 text-right font-bold">View</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-surface-border">
+        <template x-for="pod in pods" :key="pod.name + pod.ip">
+          <tr class="transition-colors hover:bg-surface-elevated/80">
+            <td class="px-6 py-4 font-semibold text-corefinity-blue" x-text="pod.name"></td>
+            <td class="px-4 py-4 font-semibold text-corefinity-blue" x-text="pod.node"></td>
+            <td class="px-4 py-4 text-text-secondary" x-text="pod.nodeType"></td>
+            <td class="px-4 py-4 text-corefinity-blue" x-text="pod.ip"></td>
+            <td class="px-4 py-4 text-text-secondary" x-text="pod.age"></td>
+            <td class="px-4 py-4 text-text-primary" x-text="pod.containers"></td>
+            <td class="px-4 py-4 text-text-secondary" x-text="pod.cpu"></td>
+            <td class="px-4 py-4 text-text-secondary" x-text="pod.memory"></td>
+            <td class="px-4 py-4 text-text-secondary" x-text="pod.restarts"></td>
+            <td class="px-4 py-4">
+              <span class="inline-flex items-center justify-center rounded-full border border-green-200 bg-green-500/10 p-1 text-green-600">
+                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </span>
+            </td>
+            <td class="px-4 py-4 text-text-secondary" x-text="pod.status"></td>
+            <td class="px-4 py-4 text-right">
+              <button type="button" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-transparent text-corefinity-cyan transition-colors hover:border-surface-border hover:bg-surface-bg" :aria-label="'View pod ' + pod.name">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M1.5 12s3.5-7 10.5-7 10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+  </div>
+</div>

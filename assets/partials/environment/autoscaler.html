@@ -1,0 +1,37 @@
+<div id="autoscaler-root" class="space-y-6 px-6 py-5">
+  <section class="flex flex-wrap items-center gap-2">
+    <span class="inline-flex h-9 items-center rounded-lg border border-surface-border bg-surface-bg px-4 text-sm font-semibold text-text-primary">Status</span>
+    <button type="button" class="inline-flex h-9 items-center rounded-lg bg-corefinity-orange px-5 text-sm font-semibold text-white shadow-sm">Graphs</button>
+  </section>
+
+  <!-- Range selector: handled by JS, no Alpine binding needed -->
+  <section class="flex flex-wrap items-center gap-2" id="autoscaler-ranges">
+    <button type="button" data-range="hour"  class="as-range-btn inline-flex h-9 items-center rounded-lg px-5 text-sm font-semibold transition-colors border border-surface-border bg-surface-bg text-text-primary hover:bg-surface-elevated">Hour</button>
+    <button type="button" data-range="day"   class="as-range-btn inline-flex h-9 items-center rounded-lg px-5 text-sm font-semibold transition-colors bg-corefinity-orange text-white">Day</button>
+    <button type="button" data-range="week"  class="as-range-btn inline-flex h-9 items-center rounded-lg px-5 text-sm font-semibold transition-colors border border-surface-border bg-surface-bg text-text-primary hover:bg-surface-elevated">Week</button>
+    <button type="button" data-range="month" class="as-range-btn inline-flex h-9 items-center rounded-lg px-5 text-sm font-semibold transition-colors border border-surface-border bg-surface-bg text-text-primary hover:bg-surface-elevated">Month</button>
+  </section>
+
+  <section class="rounded-xl border border-surface-border bg-surface-bg/30 p-4">
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[0.14em] text-corefinity-blue">Autoscaler Trend</p>
+        <p class="text-sm text-text-secondary">CPU and memory utilization over selected range.</p>
+      </div>
+      <div class="flex items-center gap-4 text-xs font-semibold">
+        <span class="inline-flex items-center gap-2 text-corefinity-cyan">
+          <span class="h-2.5 w-2.5 rounded-full bg-corefinity-cyan"></span>
+          CPU avg <span id="as-cpu-avg" class="text-text-primary">—</span>
+        </span>
+        <span class="inline-flex items-center gap-2 text-corefinity-orange">
+          <span class="h-2.5 w-2.5 rounded-full bg-corefinity-orange"></span>
+          Memory avg <span id="as-mem-avg" class="text-text-primary">—</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="h-[320px] w-full">
+      <canvas id="autoscaler-canvas"></canvas>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,157 @@
+<div x-data="{
+  rows: [
+    { task: 'Nginx Logs', lastFetched: '4 years ago', level: 'error', result: 'No logs found' },
+    { task: 'Access Server Attached', lastFetched: '8 hours ago', level: 'error', result: 'Access server is missing' },
+    { task: 'Load Balancer Logs', lastFetched: '4 years ago', level: 'error', result: 'Load balancer is not attached.' },
+    { task: 'Cloudflare Activated', lastFetched: '28 minutes ago', level: 'error', result: 'Missing cloudflare headers' },
+    { task: 'Load Balancer Attached', lastFetched: '8 hours ago', level: 'error', result: 'Load balancer is not attached.' }
+  ],
+  showModal: false,
+  runningIndex: -1,
+  progress: 0,
+  logs: [],
+  timer: null,
+  activeTask: '',
+  outcomeByTask: {
+    'Nginx Logs': { level: 'ok', result: '4 log files indexed successfully' },
+    'Access Server Attached': { level: 'error', result: 'Access server is missing' },
+    'Load Balancer Logs': { level: 'warning', result: 'Load balancer attached but no recent logs' },
+    'Cloudflare Activated': { level: 'ok', result: 'Cloudflare headers detected correctly' },
+    'Load Balancer Attached': { level: 'error', result: 'Load balancer is not attached.' }
+  },
+  runDiagnostic(idx) {
+    const row = this.rows[idx];
+    if (!row || this.runningIndex !== -1) return;
+    this.runningIndex = idx;
+    this.activeTask = row.task;
+    this.progress = 0;
+    this.logs = [];
+    this.showModal = true;
+
+    const steps = [
+      'Preparing diagnostic context',
+      'Resolving DNS records',
+      'Checking network reachability',
+      'Collecting service metadata',
+      'Running task-specific validation',
+      'Building diagnostic report'
+    ];
+
+    let stepIndex = 0;
+    this.timer = window.setInterval(() => {
+      if (stepIndex < steps.length) {
+        const elapsed = (Math.random() * 0.8 + 0.2).toFixed(2);
+        this.logs.push('[' + new Date().toLocaleTimeString() + '] ' + steps[stepIndex] + ' (' + elapsed + 's)');
+        this.progress = Math.min(92, this.progress + 16);
+        stepIndex += 1;
+        return;
+      }
+
+      const outcome = this.outcomeByTask[row.task] || { level: 'ok', result: 'Diagnostic completed successfully' };
+      row.level = outcome.level;
+      row.result = outcome.result;
+      row.lastFetched = 'Just now';
+      this.progress = 100;
+      this.logs.push('[' + new Date().toLocaleTimeString() + '] Diagnostic finished: ' + outcome.result);
+
+      window.clearInterval(this.timer);
+      this.timer = null;
+      this.runningIndex = -1;
+      if (window.Alpine && this.$store && this.$store.toast) {
+        this.$store.toast.show(row.task + ' recheck completed');
+      }
+    }, 700);
+  },
+  closeModal() {
+    this.showModal = false;
+  }
+}">
+  <div class="border-b border-surface-border bg-surface-bg/70 px-6 py-4">
+    <h3 class="text-2xl font-semibold text-corefinity-blue">Diagnostics</h3>
+    <div class="mt-4 max-w-xs">
+      <label class="relative block">
+        <span class="sr-only">Search diagnostics</span>
+        <svg class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" fill="none"
+          stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8" />
+          <path stroke-linecap="round" d="M21 21l-4.35-4.35" />
+        </svg>
+        <input type="search" placeholder="Search" class="cf-input h-10 pl-9" />
+      </label>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="min-w-[980px] w-full text-sm">
+      <thead class="bg-surface-bg text-[11px] uppercase tracking-[0.16em] text-corefinity-blue">
+        <tr>
+          <th class="px-4 py-3 text-left font-bold w-10"><input type="checkbox"
+              class="h-4 w-4 rounded border-surface-border text-corefinity-cyan" /></th>
+          <th class="px-4 py-3 text-left font-bold">Task</th>
+          <th class="px-4 py-3 text-left font-bold">Last fetched</th>
+          <th class="px-4 py-3 text-left font-bold">Result</th>
+          <th class="px-4 py-3 text-right font-bold">Action</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-surface-border">
+        <template x-for="(row, idx) in rows" :key="row.task">
+          <tr class="transition-colors hover:bg-surface-elevated/80">
+            <td class="px-4 py-3"><input type="checkbox"
+                class="h-4 w-4 rounded border-surface-border text-corefinity-cyan" /></td>
+            <td class="px-4 py-3 text-corefinity-blue" x-text="row.task"></td>
+            <td class="px-4 py-3 text-text-secondary" x-text="row.lastFetched"></td>
+            <td class="px-4 py-3">
+              <template x-if="row.level === 'error'"><span><span class="font-semibold text-red-500">ERROR:</span> <span
+                    class="text-text-secondary" x-text="row.result"></span></span></template>
+              <template x-if="row.level === 'warning'"><span><span class="font-semibold text-amber-500">WARNING:</span>
+                  <span class="text-text-secondary" x-text="row.result"></span></span></template>
+              <template x-if="row.level === 'ok'"><span><span class="font-semibold text-green-600">OK:</span> <span
+                    class="text-text-secondary" x-text="row.result"></span></span></template>
+            </td>
+            <td class="px-4 py-3 text-right">
+              <button type="button" @click="runDiagnostic(idx)" :disabled="runningIndex !== -1"
+                class="rounded-md bg-corefinity-orange px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#e05e00] disabled:cursor-not-allowed disabled:opacity-60"
+                x-text="runningIndex === idx ? 'Checking...' : 'Recheck'"></button>
+            </td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+  </div>
+
+  <div
+    class="flex items-center justify-between border-t border-surface-border bg-surface-bg px-6 py-2 text-xs font-semibold text-text-muted">
+    <button type="button" class="transition-colors hover:text-text-secondary">Previous</button>
+    <span>1-5 of 5</span>
+    <button type="button" class="transition-colors hover:text-text-secondary">Next</button>
+  </div>
+
+  <div x-show="showModal" style="display:none"
+    class="fixed inset-0 z-[70] flex items-center justify-center bg-black/40 p-4" @click.self="closeModal()"
+    @keydown.escape.window="closeModal()">
+    <div class="w-full max-w-3xl rounded-2xl border border-surface-border bg-surface-card shadow-2xl">
+      <div class="border-b border-surface-border px-6 py-4">
+        <div class="flex items-center justify-between gap-3">
+          <h4 class="text-xl font-bold text-text-primary">Running diagnostic</h4>
+          <button type="button"
+            class="rounded-md border border-surface-border px-3 py-1.5 text-xs font-semibold text-text-secondary hover:bg-surface-elevated"
+            @click="closeModal()">Hide</button>
+        </div>
+        <p class="mt-1 text-sm text-text-secondary" x-text="activeTask"></p>
+        <div class="mt-4 h-2.5 w-full rounded-full bg-surface-elevated">
+          <div class="h-2.5 rounded-full bg-corefinity-cyan transition-all duration-300"
+            :style="'width: ' + progress + '%'" role="progressbar" :aria-valuenow="progress" aria-valuemin="0"
+            aria-valuemax="100"></div>
+        </div>
+      </div>
+      <div class="max-h-72 overflow-y-auto px-6 py-4">
+        <template x-if="logs.length === 0">
+          <p class="text-sm text-text-muted">Starting checks...</p>
+        </template>
+        <template x-for="line in logs" :key="line">
+          <p class="border-b border-surface-border py-2 text-sm text-text-primary last:border-b-0" x-text="line"></p>
+        </template>
+      </div>
+    </div>
+  </div>
+</div>

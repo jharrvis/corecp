@@ -1,40 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>User Profile — Corefinity</title>
+  <title>User Profile â€” Corefinity</title>
   <meta name="description" content="Manage your Corefinity account profile, security settings, and API access." />
 
   <!-- Tailwind CDN + custom tokens -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: { sans: ['Inter', 'sans-serif'] },
           colors: {
-            'corefinity-blue':   '#0F488A',
-            'corefinity-cyan':   '#009BDE',
-            'corefinity-orange': '#FF7102',
+            'corefinity-blue': 'var(--cf-blue)',
+            'corefinity-cyan': 'var(--cf-cyan)',
+            'corefinity-orange': 'var(--cf-orange)',
             surface: {
-              bg:           '#F3F8FC',
-              card:         '#FFFFFF',
-              elevated:     '#E8F3FB',
-              border:       '#CFE1F1',
-              'border-focus': '#009BDE',
+              bg: 'var(--cf-bg)',
+              card: 'var(--cf-card)',
+              elevated: 'var(--cf-elevated)',
+              border: 'var(--cf-border)',
+              'border-focus': 'var(--cf-blue)',
             },
             text: {
-              primary:   '#0B2540',
-              secondary: '#3B5978',
-              muted:     '#6F8BA7',
-              link:      '#0F488A',
+              primary: 'var(--cf-text-primary)',
+              secondary: 'var(--cf-text-secondary)',
+              muted: 'var(--cf-text-muted)',
+              link: 'var(--cf-blue)',
             },
           },
           boxShadow: {
-            card:       '0 4px 16px -6px rgba(15,72,138,.14)',
-            'card-hover': '0 10px 30px -10px rgba(15,72,138,.22)',
-            input:      '0 0 0 3px rgba(0,155,222,.18)',
+            card: 'var(--cf-shadow-sm)',
+            'card-hover': 'var(--cf-shadow-md)',
+            input: '0 0 0 3px rgba(0,155,222,.18)',
           },
         },
       },
@@ -44,30 +46,34 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap"
+    rel="stylesheet" />
 
   <!-- Corefinity Design System -->
   <link rel="stylesheet" href="assets/css/corefinity.css" />
 
-  
+
 
   <!-- Alpine.js -->
+  <!-- Alpine must load before chart.js to avoid race condition in autoscalerTab.init() -->
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 </head>
+
 <body class="text-text-primary antialiased min-h-screen" x-data>
 
-  <!-- ═══════════════════════════════════════════════════════════════════
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        TOP NAVIGATION BAR
-  ═══════════════════════════════════════════════════════════════════ -->
+  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <header class="cf-header">
 
     <!-- Mobile hamburger (md:hidden) -->
-    <button
-      id="sidebarToggle"
+    <button id="sidebarToggle"
       class="md:hidden p-2 rounded-lg hover:bg-surface-elevated transition-colors flex-shrink-0"
-      aria-label="Open sidebar"
-      @click="$store.mobileSidebar.toggle()">
-      <svg class="w-5 h-5 text-text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      aria-label="Open sidebar" @click="$store.mobileSidebar.toggle()">
+      <svg class="w-5 h-5 text-text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
     </button>
 
     <!-- Logo -->
@@ -77,32 +83,28 @@
       </div>
     </a>
 
-    <!-- Desktop sidebar toggle — samping logo, sebelum search bar -->
-    <button
-      class="cf-sidebar-toggle"
-      :class="{ 'is-collapsed': !$store.sidebar.open }"
-      :title="$store.sidebar.open ? 'Collapse sidebar' : 'Expand sidebar'"
-      aria-label="Toggle sidebar"
+    <!-- Desktop sidebar toggle â€” samping logo, sebelum search bar -->
+    <button class="cf-sidebar-toggle" :class="{ 'is-collapsed': !$store.sidebar.open }"
+      :title="$store.sidebar.open ? 'Collapse sidebar' : 'Expand sidebar'" aria-label="Toggle sidebar"
       @click="$store.sidebar.toggle()">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5z"/><path d="M9 3v18"/><path stroke-linecap="round" stroke-linejoin="round" d="M13 9l-3 3 3 3"/></svg>
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M3 5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5z" />
+        <path d="M9 3v18" />
+        <path stroke-linecap="round" stroke-linejoin="round" d="M13 9l-3 3 3 3" />
+      </svg>
     </button>
 
     <!-- Global Search Trigger -->
-    <div
-      class="cf-search-trigger flex-1 max-w-md hidden sm:flex items-center md:ml-3 lg:ml-6"
-      role="button"
-      tabindex="0"
-      aria-label="Open search"
-      @click="$store.globalSearch.open()"
+    <div class="cf-search-trigger flex-1 max-w-md hidden sm:flex items-center md:ml-3 lg:ml-6" role="button"
+      tabindex="0" aria-label="Open search" @click="$store.globalSearch.open()"
       @keydown.enter="$store.globalSearch.open()">
       <div class="relative w-full">
-        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
-        <input
-          type="search"
-          readonly
-          placeholder="Search pages & settings…"
-          aria-label="Search"
-          tabindex="-1"
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted pointer-events-none" fill="none"
+          stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8" />
+          <path stroke-linecap="round" d="M21 21l-4.35-4.35" />
+        </svg>
+        <input type="search" readonly placeholder="Search pages & settingsâ€¦" aria-label="Search" tabindex="-1"
           class="w-full bg-surface-bg border border-surface-border rounded-xl pl-9 pr-16 py-2 text-sm text-text-muted placeholder-text-muted focus:outline-none transition-all" />
         <kbd class="cf-kbd absolute right-3 top-1/2 -translate-y-1/2">/</kbd>
       </div>
@@ -111,46 +113,63 @@
     <!-- Right actions -->
     <div class="ml-auto flex items-center gap-1.5">
 
+      <!-- Theme Toggle -->
+      <button
+        class="p-2 rounded-lg hover:bg-surface-elevated transition-colors border border-transparent hover:border-surface-border group"
+        aria-label="Toggle theme" @click="$store.theme.toggle()">
+        <!-- Sun icon (shown in dark mode) -->
+        <svg x-show="$store.theme.mode === 'dark'" class="w-5 h-5 text-corefinity-orange" fill="none"
+          stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M12 3v1m0 16v1m9-9h-1M4 9H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+        </svg>
+        <!-- Moon icon (shown in light mode) -->
+        <svg x-show="$store.theme.mode === 'light'" class="w-5 h-5 text-text-secondary" fill="none"
+          stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+        </svg>
+      </button>
+
       <!-- Notification Bell -->
       <div class="relative" x-data="{ open: false }">
         <button
           class="relative p-2 rounded-lg hover:bg-surface-elevated transition-colors border border-transparent hover:border-surface-border"
-          aria-label="Notifications"
-          :aria-expanded="open.toString()"
-          aria-haspopup="true"
-          @click="open = !open">
-          <svg class="w-5 h-5 text-text-secondary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+          aria-label="Notifications" :aria-expanded="open.toString()" aria-haspopup="true" @click="open = !open">
+          <svg class="w-5 h-5 text-text-secondary" fill="none" stroke="currentColor" stroke-width="2"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>
           <span class="cf-notif-dot" aria-hidden="true"></span>
         </button>
 
         <!-- Notification Dropdown -->
-        <div
-          x-show="open"
-          @click.outside="open = false"
-          x-transition:enter="transition ease-out duration-150"
+        <div x-show="open" @click.outside="open = false" x-transition:enter="transition ease-out duration-150"
           x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
           x-transition:enter-end="opacity-100 scale-100 translate-y-0"
           x-transition:leave="transition ease-in duration-100"
           x-transition:leave-start="opacity-100 scale-100 translate-y-0"
-          x-transition:leave-end="opacity-0 scale-95 -translate-y-1"
-          style="display:none"
-          class="cf-dropdown-panel w-[22rem]"
-          role="menu"
-          aria-label="Notifications">
+          x-transition:leave-end="opacity-0 scale-95 -translate-y-1" style="display:none"
+          class="cf-dropdown-panel w-[22rem]" role="menu" aria-label="Notifications">
 
           <div class="flex items-center justify-between px-4 py-3 border-b border-surface-border bg-surface-bg">
             <div>
               <p class="text-sm font-semibold text-text-primary">Notifications</p>
               <p class="text-xs text-text-muted mt-0.5">3 new updates need your attention.</p>
             </div>
-            <button type="button" class="text-xs font-medium text-corefinity-blue hover:text-corefinity-cyan transition-colors">Mark all read</button>
+            <button type="button"
+              class="text-xs font-medium text-corefinity-blue hover:text-corefinity-cyan transition-colors">Mark all
+              read</button>
           </div>
 
           <div class="max-h-72 overflow-y-auto">
             <!-- Notif 1 -->
             <button type="button" class="cf-dropdown-item gap-3 py-3 border-b border-surface-border/70" role="menuitem">
               <div class="cf-card-icon cf-card-icon--orange w-10 h-10 flex-shrink-0">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3" />
+                  <circle cx="12" cy="12" r="9" />
+                </svg>
               </div>
               <div class="min-w-0 text-left">
                 <p class="text-sm font-medium text-text-primary">Contest deadline updated</p>
@@ -161,7 +180,10 @@
             <!-- Notif 2 -->
             <button type="button" class="cf-dropdown-item gap-3 py-3 border-b border-surface-border/70" role="menuitem">
               <div class="cf-card-icon cf-card-icon--cyan w-10 h-10 flex-shrink-0">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h8m-8 4h5m-7 4h12a2 2 0 002-2V8a2 2 0 00-2-2h-3.586a1 1 0 01-.707-.293l-1.414-1.414A1 1 0 0011.586 4H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M8 12h8m-8 4h5m-7 4h12a2 2 0 002-2V8a2 2 0 00-2-2h-3.586a1 1 0 01-.707-.293l-1.414-1.414A1 1 0 0011.586 4H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
               </div>
               <div class="min-w-0 text-left">
                 <p class="text-sm font-medium text-text-primary">New team submission received</p>
@@ -172,7 +194,9 @@
             <!-- Notif 3 -->
             <button type="button" class="cf-dropdown-item gap-3 py-3" role="menuitem">
               <div class="cf-card-icon cf-card-icon--blue w-10 h-10 flex-shrink-0">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
               </div>
               <div class="min-w-0 text-left">
                 <p class="text-sm font-medium text-text-primary">Weekly report is ready</p>
@@ -183,7 +207,8 @@
           </div>
 
           <div class="px-4 py-3 border-t border-surface-border bg-surface-bg">
-            <a href="#" class="text-sm font-medium text-corefinity-blue hover:text-corefinity-cyan transition-colors" role="menuitem">View all notifications →</a>
+            <a href="#" class="text-sm font-medium text-corefinity-blue hover:text-corefinity-cyan transition-colors"
+              role="menuitem">View all notifications â†’</a>
           </div>
         </div>
       </div>
@@ -192,41 +217,49 @@
       <div class="relative" x-data="{ open: false }">
         <button
           class="flex items-center gap-2 pl-1.5 pr-3 py-1.5 rounded-lg hover:bg-surface-elevated transition-colors border border-transparent hover:border-surface-border"
-          aria-haspopup="true"
-          :aria-expanded="open.toString()"
-          @click="open = !open">
+          aria-haspopup="true" :aria-expanded="open.toString()" @click="open = !open">
           <div class="cf-avatar cf-avatar--sm">CJ</div>
           <span class="text-sm font-medium text-text-primary hidden sm:block">Catherine Jarosz</span>
-          <svg class="w-3.5 h-3.5 text-text-muted transition-transform duration-150" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          <svg class="w-3.5 h-3.5 text-text-muted transition-transform duration-150" fill="none" stroke="currentColor"
+            stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
         </button>
 
-        <div
-          x-show="open"
-          @click.outside="open = false"
-          x-transition:enter="transition ease-out duration-150"
+        <div x-show="open" @click.outside="open = false" x-transition:enter="transition ease-out duration-150"
           x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
           x-transition:enter-end="opacity-100 scale-100 translate-y-0"
           x-transition:leave="transition ease-in duration-100"
           x-transition:leave-start="opacity-100 scale-100 translate-y-0"
-          x-transition:leave-end="opacity-0 scale-95 -translate-y-1"
-          style="display:none"
-          class="cf-dropdown-panel w-52"
+          x-transition:leave-end="opacity-0 scale-95 -translate-y-1" style="display:none" class="cf-dropdown-panel w-52"
           role="menu">
           <a href="#" class="cf-dropdown-item cf-dropdown-item--primary" role="menuitem">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path stroke-linecap="round" d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="8" r="4" />
+              <path stroke-linecap="round" d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+            </svg>
             Profile
           </a>
           <a href="ssh-keys.html" class="cf-dropdown-item" role="menuitem">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+            </svg>
             SSH Keys
           </a>
           <a href="environment.html" class="cf-dropdown-item" role="menuitem">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+            </svg>
             Environment Page
           </a>
           <div class="cf-dropdown-divider"></div>
           <a href="#" class="cf-dropdown-item cf-dropdown-item--danger" role="menuitem">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013-3v1"/></svg>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013-3v1" />
+            </svg>
             Logout
           </a>
         </div>
@@ -234,18 +267,15 @@
     </div>
   </header>
 
-  <!-- ═══════════════════════════════════════════════════════════════════
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        LAYOUT (below fixed header)
-  ═══════════════════════════════════════════════════════════════════ -->
+  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div class="cf-layout">
 
-    <!-- ═══════════════════════════════════════════════════════════════
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
          SIDEBAR
-    ═══════════════════════════════════════════════════════════════ -->
-    <aside
-      id="sidebar"
-      class="cf-sidebar bg-white border-r border-surface-border"
-      :class="{
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <aside id="sidebar" class="cf-sidebar bg-surface-card border-r border-surface-border" :class="{
         'cf-sidebar--collapsed':     !$store.sidebar.open,
         'cf-sidebar--mobile-open':   $store.mobileSidebar.open
       }">
@@ -259,39 +289,64 @@
       <nav class="px-2 pb-4 flex-1" aria-label="Environment navigation">
 
         <a href="#" class="cf-nav-item cf-nav-item--active">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+          </svg>
           <span class="cf-nav-text">Overview</span></a>
 
         <a href="#" class="cf-nav-item">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+          </svg>
           <span class="cf-nav-text">Web Server</span></a>
 
         <a href="#" class="cf-nav-item">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+          </svg>
           <span class="cf-nav-text">PHP / Node.js</span></a>
 
         <a href="#" class="cf-nav-item">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+          </svg>
           <span class="cf-nav-text">Database</span></a>
 
         <a href="#" class="cf-nav-item">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+          </svg>
           <span class="cf-nav-text">Backups</span></a>
 
         <a href="#" class="cf-nav-item">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
           <span class="cf-nav-text">Security & SSL</span></a>
 
         <a href="#" class="cf-nav-item">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+          </svg>
           <span class="cf-nav-text">Domains</span></a>
 
         <a href="#" class="cf-nav-item">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+          </svg>
           <span class="cf-nav-text">Git Push / Pipeline</span></a>
 
         <a href="#" class="cf-nav-item">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2v10a2 2 0 01-2 2h-2a2 2 0 01-2-2V5z"/></svg>
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2v10a2 2 0 01-2 2h-2a2 2 0 01-2-2V5z" />
+          </svg>
           <span class="cf-nav-text">CronJobs</span></a>
 
       </nav>
@@ -304,30 +359,24 @@
           options: ['All clients', 'Client A', 'Client B'],
           selected: 'All clients'
         }" @click.outside="open = false" @keydown.escape="open = false">
-          <button
-            type="button"
-            class="cf-connected-select-btn"
-            :aria-expanded="open.toString()"
-            @click="open = !open">
+          <button type="button" class="cf-connected-select-btn" :aria-expanded="open.toString()" @click="open = !open">
             <span x-text="selected"></span>
-            <svg class="w-3.5 h-3.5 text-text-muted transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            <svg class="w-3.5 h-3.5 text-text-muted transition-transform duration-200" :class="{ 'rotate-180': open }"
+              fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
           </button>
-          
-          <div
-            x-show="open"
-            style="display:none"
-            class="cf-connected-select-panel"
-            role="listbox">
+
+          <div x-show="open" style="display:none" class="cf-connected-select-panel" role="listbox">
             <template x-for="option in options" :key="option">
-              <button
-                type="button"
-                class="cf-connected-select-item"
-                :class="{ 'is-selected': selected === option }"
-                @click="selected = option; open = false"
-                role="option"
+              <button type="button" class="cf-connected-select-item" :class="{ 'is-selected': selected === option }"
+                @click="selected = option; open = false" role="option"
                 :aria-selected="(selected === option).toString()">
                 <span x-text="option"></span>
-                <svg x-show="selected === option" class="w-4 h-4 ml-auto text-current" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <svg x-show="selected === option" class="w-4 h-4 ml-auto text-current" fill="none" stroke="currentColor"
+                  stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
               </button>
             </template>
           </div>
@@ -336,36 +385,28 @@
     </aside>
 
     <!-- Mobile overlay -->
-    <div
-      class="cf-mobile-overlay md:hidden"
-      x-show="$store.mobileSidebar.open"
-      @click="$store.mobileSidebar.close()"
-      x-transition:enter="transition-opacity ease-out duration-250"
-      x-transition:enter-start="opacity-0"
-      x-transition:enter-end="opacity-100"
-      x-transition:leave="transition-opacity ease-in duration-200"
-      x-transition:leave-start="opacity-100"
-      x-transition:leave-end="opacity-0"
-      aria-hidden="true"
-      style="display:none">
+    <div class="cf-mobile-overlay md:hidden" x-show="$store.mobileSidebar.open" @click="$store.mobileSidebar.close()"
+      x-transition:enter="transition-opacity ease-out duration-250" x-transition:enter-start="opacity-0"
+      x-transition:enter-end="opacity-100" x-transition:leave="transition-opacity ease-in duration-200"
+      x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" aria-hidden="true" style="display:none">
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════════════
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
          MAIN CONTENT
-    ═══════════════════════════════════════════════════════════════ -->
-    <main class="cf-main px-4 sm:px-6 lg:px-8 py-6 max-w-[1400px] w-full" x-data="{
-        activeTab: 'General',
-        selectedAction: '',
-        actions: ['Restart Server', 'Clear Cache', 'Run Migrations', 'Reset PHP', 'Flush Redis', 'Rebuild Assets']
-      }">
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <main class="cf-main px-4 sm:px-6 lg:px-8 py-6 max-w-[1400px] w-full" x-data="environmentPage()" x-init="init()">
 
       <!-- Page header -->
       <div class="mb-6">
         <nav class="cf-breadcrumb mb-2.5" aria-label="Breadcrumb">
           <a href="user-profile.html">Home</a>
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7-7"/></svg>
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7-7" />
+          </svg>
           <a href="#">Environments</a>
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7-7"/></svg>
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7-7" />
+          </svg>
           <span class="font-medium text-text-secondary">Production Environment</span>
         </nav>
         <h1 class="cf-page-title text-2xl">Production Environment</h1>
@@ -375,23 +416,32 @@
       <!-- MAIN ENVIRONMENT CARD -->
       <div class="cf-card overflow-visible">
 
-        <!-- ── Card Top: Title + Action Toolbar ── -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-5 py-3.5 border-b border-surface-border">
+        <!-- â”€â”€ Card Top: Title + Action Toolbar â”€â”€ -->
+        <div
+          class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-5 py-3.5 border-b border-surface-border">
           <h2 class="text-lg font-bold text-corefinity-blue">Environment Info</h2>
 
           <div class="flex items-center gap-2">
             <!-- Select Action dropdown -->
             <div class="relative" x-data="{ open: false }" @click.outside="open = false">
               <button type="button" @click="open = !open"
-                class="flex items-center gap-2 bg-white border border-surface-border rounded-lg px-3 py-1.5 text-sm text-text-secondary font-medium hover:border-corefinity-cyan transition-all min-w-[145px] justify-between"
+                class="flex items-center gap-2 bg-surface-card border border-surface-border rounded-lg px-3 py-1.5 text-sm text-text-secondary font-medium hover:border-corefinity-cyan transition-all min-w-[145px] justify-between"
                 :aria-expanded="open.toString()">
                 <span x-text="selectedAction || 'Select Action'"></span>
-                <svg class="w-3.5 h-3.5 text-text-muted transition-transform duration-150" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                <svg class="w-3.5 h-3.5 text-text-muted transition-transform duration-150"
+                  :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" stroke-width="2"
+                  viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
               </button>
-              <div x-show="open" style="display:none"
-                x-transition:enter="transition ease-out duration-150" x-transition:enter-start="opacity-0 scale-95 -translate-y-1" x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100 scale-100 translate-y-0" x-transition:leave-end="opacity-0 scale-95 -translate-y-1"
-                class="absolute right-0 top-full mt-1.5 w-52 bg-white border border-surface-border rounded-xl shadow-lg z-50 overflow-hidden py-1" role="menu">
+              <div x-show="open" style="display:none" x-transition:enter="transition ease-out duration-150"
+                x-transition:enter-start="opacity-0 scale-95 -translate-y-1"
+                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                x-transition:leave="transition ease-in duration-100"
+                x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+                x-transition:leave-end="opacity-0 scale-95 -translate-y-1"
+                class="absolute right-0 top-full mt-1.5 w-52 bg-surface-card border border-surface-border rounded-xl shadow-lg z-50 overflow-hidden py-1"
+                role="menu">
                 <template x-for="action in actions" :key="action">
                   <button type="button" @click="selectedAction = action; open = false"
                     class="w-full text-left px-4 py-2 text-sm text-text-secondary hover:bg-surface-elevated hover:text-text-primary transition-colors"
@@ -405,28 +455,36 @@
             <button type="button" title="Run selected action"
               @click="selectedAction ? $store.toast.show('Running: ' + selectedAction) : $store.toast.show('Please select an action first')"
               class="w-8 h-8 flex items-center justify-center rounded-lg bg-corefinity-cyan hover:bg-[#007db5] text-white transition-all shadow-sm hover:shadow-md active:scale-95">
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
             </button>
 
             <!-- Delete Button -->
             <button type="button" title="Delete environment" @click="$dispatch('open-delete')"
-              class="w-8 h-8 flex items-center justify-center rounded-lg bg-white border border-surface-border hover:border-red-300 hover:bg-red-50 text-text-muted hover:text-red-500 transition-all active:scale-95">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-card border border-surface-border hover:border-red-300 hover:bg-red-500/10 text-text-muted hover:text-red-500 transition-all active:scale-95">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
             </button>
 
             <!-- Edit Button -->
             <button type="button" title="Edit environment" @click="$dispatch('open-edit')"
               class="w-8 h-8 flex items-center justify-center rounded-lg bg-corefinity-orange hover:bg-[#e05e00] text-white transition-all shadow-sm hover:shadow-md active:scale-95">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
             </button>
           </div>
         </div>
 
-        <!-- ── Tab Navigation ── -->
+        <!-- â”€â”€ Tab Navigation â”€â”€ -->
         <div class="overflow-x-auto border-b border-surface-border">
           <nav class="flex min-w-max px-2" aria-label="Environment tabs" role="tablist">
-            <template x-for="tab in ['General', 'Deployments', 'Emails', 'Cache Warmer', 'Actions', 'Diagnostics', 'Notifications', 'Autoscaler', 'Monitors', 'Quick Actions', 'Firewall']" :key="tab">
-              <button @click="activeTab = tab" role="tab" :aria-selected="(activeTab === tab).toString()"
+            <template x-for="tab in tabs" :key="tab">
+              <button @click="setActiveTab(tab)" role="tab" :aria-selected="(activeTab === tab).toString()"
                 class="relative py-3 px-4 text-sm font-semibold whitespace-nowrap transition-all duration-200 focus:outline-none border-b-2"
                 :class="activeTab === tab ? 'text-corefinity-blue border-corefinity-orange -mb-px' : 'text-text-muted hover:text-text-secondary border-transparent -mb-px'">
                 <span x-text="tab"></span>
@@ -435,181 +493,51 @@
           </nav>
         </div>
 
-        <!-- ── GENERAL TAB CONTENT ── -->
-        <div x-show="activeTab === 'General'"
-          x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-1" x-transition:enter-end="opacity-100 translate-y-0"
-          class="divide-y divide-surface-border/60">
+        <div x-ref="tabPanel" class="min-h-[20rem]" x-html="tabContent[activeTab] || loadingMarkup"></div>
+        <!-- /.cf-card -->
 
-          <!-- Section Header: Environment Details -->
-          <div class="px-6 py-3 bg-surface-bg/40">
-            <p class="text-xs font-bold text-corefinity-blue uppercase tracking-wider">Environment Details</p>
-          </div>
-
-          <div class="grid grid-cols-[200px_1fr] sm:grid-cols-[220px_1fr] items-center px-6 py-3 hover:bg-surface-bg/30 transition-colors">
-            <span class="text-sm text-corefinity-blue font-medium">Name</span>
-            <span class="text-sm text-text-primary">Production Environment</span>
-          </div>
-          <div class="grid grid-cols-[200px_1fr] sm:grid-cols-[220px_1fr] items-center px-6 py-3 hover:bg-surface-bg/30 transition-colors">
-            <span class="text-sm text-corefinity-blue font-medium">URL</span>
-            <a href="#" class="text-sm text-corefinity-cyan hover:underline">manage.corefinity.com</a>
-          </div>
-          <div class="grid grid-cols-[200px_1fr] sm:grid-cols-[220px_1fr] items-center px-6 py-3 hover:bg-surface-bg/30 transition-colors">
-            <span class="text-sm text-corefinity-blue font-medium">Website</span>
-            <span class="text-sm font-semibold text-corefinity-orange">Manage.corefinity.com</span>
-          </div>
-          <div class="grid grid-cols-[200px_1fr] sm:grid-cols-[220px_1fr] items-center px-6 py-3 hover:bg-surface-bg/30 transition-colors">
-            <span class="text-sm text-corefinity-blue font-medium">Namespace</span>
-            <span class="text-sm text-text-muted">—</span>
-          </div>
-          <div class="grid grid-cols-[200px_1fr] sm:grid-cols-[220px_1fr] items-center px-6 py-3 hover:bg-surface-bg/30 transition-colors">
-            <span class="text-sm text-corefinity-blue font-medium">Provider</span>
-            <span class="text-sm font-semibold text-corefinity-orange">Google Compute Platform</span>
-          </div>
-          <div class="grid grid-cols-[200px_1fr] sm:grid-cols-[220px_1fr] items-center px-6 py-3 hover:bg-surface-bg/30 transition-colors">
-            <span class="text-sm text-corefinity-blue font-medium">Platform</span>
-            <span class="text-sm font-semibold text-corefinity-orange">Laravel</span>
-          </div>
-          <div class="grid grid-cols-[200px_1fr] sm:grid-cols-[220px_1fr] items-center px-6 py-3 hover:bg-surface-bg/30 transition-colors">
-            <span class="text-sm text-corefinity-blue font-medium">Cluster</span>
-            <span class="text-sm font-semibold text-corefinity-orange">cf-europe-west2-cluster-1</span>
-          </div>
-          <div class="grid grid-cols-[200px_1fr] sm:grid-cols-[220px_1fr] items-center px-6 py-3 hover:bg-surface-bg/30 transition-colors">
-            <span class="text-sm text-corefinity-blue font-medium">Environment Type</span>
-            <span class="text-sm text-text-primary">Production</span>
-          </div>
-          <div class="grid grid-cols-[200px_1fr] sm:grid-cols-[220px_1fr] items-center px-6 py-3 hover:bg-surface-bg/30 transition-colors">
-            <span class="text-sm text-corefinity-blue font-medium">Infrastructure Type</span>
-            <span class="text-sm text-text-primary">SingleHost</span>
-          </div>
-          <div class="grid grid-cols-[200px_1fr] sm:grid-cols-[220px_1fr] items-center px-6 py-3 hover:bg-surface-bg/30 transition-colors">
-            <span class="text-sm text-corefinity-blue font-medium">Monitoring</span>
-            <span class="text-sm text-text-primary flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse flex-shrink-0"></span>
-              Monitoring is enabled
-            </span>
-          </div>
-          <div class="grid grid-cols-[200px_1fr] sm:grid-cols-[220px_1fr] items-center px-6 py-3 hover:bg-surface-bg/30 transition-colors">
-            <span class="text-sm text-corefinity-blue font-medium">Current Availability</span>
-            <span class="text-sm text-text-secondary">No data</span>
-          </div>
-          <div class="grid grid-cols-[200px_1fr] sm:grid-cols-[220px_1fr] items-center px-6 py-3 hover:bg-surface-bg/30 transition-colors">
-            <span class="text-sm text-corefinity-blue font-medium">SSH Gateway Version</span>
-            <span class="text-sm text-text-primary">Version 1</span>
-          </div>
-          <div class="grid grid-cols-[200px_1fr] sm:grid-cols-[220px_1fr] items-center px-6 py-3 hover:bg-surface-bg/30 transition-colors">
-            <span class="text-sm text-corefinity-blue font-medium">SSH Port</span>
-            <span class="text-sm text-text-primary font-mono">5004</span>
-          </div>
-
-          <!-- Section Header: SEO -->
-          <div class="px-6 py-3 bg-surface-bg/40">
-            <p class="text-xs font-bold text-corefinity-blue uppercase tracking-wider">SEO</p>
-          </div>
-          <div class="grid grid-cols-[200px_1fr] sm:grid-cols-[220px_1fr] items-center px-6 py-3.5 hover:bg-surface-bg/30 transition-colors">
-            <span class="text-sm text-corefinity-blue font-medium">Indexing options</span>
-            <div class="max-w-xs">
-              <select class="cf-select w-full text-sm">
-                <option value="">Choose an option</option>
-                <option>Allow indexing</option>
-                <option>Block all indexing</option>
-                <option>Noindex</option>
-              </select>
-            </div>
-          </div>
-          <div class="grid grid-cols-[200px_1fr] sm:grid-cols-[220px_1fr] items-center px-6 py-3.5 hover:bg-surface-bg/30 transition-colors">
-            <span class="text-sm text-corefinity-blue font-medium">Default address</span>
-            <div class="max-w-xs">
-              <select class="cf-select w-full text-sm">
-                <option value="">Choose an option</option>
-                <option>www.manage.corefinity.com</option>
-                <option>manage.corefinity.com</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- ── DEPLOYMENTS TAB ── -->
-        <div x-show="activeTab === 'Deployments'" style="display:none;"
-          class="py-16 md:py-24 flex flex-col items-center justify-center text-center relative overflow-hidden group">
-          <div class="absolute inset-0 bg-gradient-to-br from-corefinity-cyan/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-          <div class="relative z-10 flex flex-col items-center">
-            <div class="w-16 h-16 mb-5 bg-white rounded-full shadow-md flex items-center justify-center text-corefinity-cyan transform group-hover:scale-110 transition-transform duration-300">
-              <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
-            </div>
-            <h3 class="text-lg font-bold text-text-primary mb-2">Deployments</h3>
-            <p class="text-sm text-text-secondary max-w-md mx-auto leading-relaxed mb-6">Manage hooks, trigger deploys, and review build history for this environment.</p>
-            <button class="cf-btn cf-btn--blue px-8">Coming Soon</button>
-          </div>
-        </div>
-
-        <!-- ── OTHER TABS PLACEHOLDER ── -->
-        <div x-show="!['General', 'Deployments'].includes(activeTab)" style="display:none;"
-          class="py-14 text-center text-text-muted text-sm">
-          <svg class="w-10 h-10 mx-auto text-surface-border mb-3" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z"></path></svg>
-          <p class="mb-1 text-text-primary font-semibold">Module: <span x-text="activeTab" class="text-corefinity-blue"></span></p>
-          <p class="text-xs">This panel is being configured.</p>
-      </div><!-- /.cf-card -->
+      </div><!-- /.cf-layout -->
 
   </div><!-- /.cf-layout -->
 
-  </div><!-- /.cf-layout -->
-
-  <!-- ═══════════════════════════════════════════════════════════════════
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        TOAST NOTIFICATION
-  ═══════════════════════════════════════════════════════════════════ -->
-  <div
-    class="cf-toast"
-    :class="{ 'is-visible': $store.toast.visible }"
-    role="status"
-    aria-live="polite"
+  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <div class="cf-toast" :class="{ 'is-visible': $store.toast.visible }" role="status" aria-live="polite"
     aria-atomic="true">
     <div class="cf-toast-check" aria-hidden="true">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+      </svg>
     </div>
     <span x-text="$store.toast.message">Saved!</span>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════════════
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        GLOBAL SEARCH MODAL
-  ═══════════════════════════════════════════════════════════════════ -->
-  <div
-    x-show="$store.globalSearch.isOpen"
-    class="cf-search-overlay"
-    @click.self="$store.globalSearch.close()"
-    x-transition:enter="transition ease-out duration-200"
-    x-transition:enter-start="opacity-0"
-    x-transition:enter-end="opacity-100"
-    x-transition:leave="transition ease-in duration-150"
-    x-transition:leave-start="opacity-100"
-    x-transition:leave-end="opacity-0"
-    style="display:none"
-    role="dialog"
-    aria-modal="true"
-    aria-label="Global search">
+  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <div x-show="$store.globalSearch.isOpen" class="cf-search-overlay" @click.self="$store.globalSearch.close()"
+    x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
+    x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150"
+    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" style="display:none" role="dialog"
+    aria-modal="true" aria-label="Global search">
 
-    <div
-      class="cf-search-modal"
-      x-show="$store.globalSearch.isOpen"
-      x-transition:enter="transition ease-out duration-200"
-      x-transition:enter-start="opacity-0 scale-95 -translate-y-2"
-      x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-      x-transition:leave="transition ease-in duration-150"
+    <div class="cf-search-modal" x-show="$store.globalSearch.isOpen"
+      x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95 -translate-y-2"
+      x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="transition ease-in duration-150"
       x-transition:leave-start="opacity-100 scale-100 translate-y-0"
-      x-transition:leave-end="opacity-0 scale-95 -translate-y-2"
-      @click.stop>
+      x-transition:leave-end="opacity-0 scale-95 -translate-y-2" @click.stop>
 
       <!-- Search input -->
       <div class="cf-search-modal-head">
-        <svg class="w-5 h-5 text-text-muted flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
-        <input
-          id="cf-search-input"
-          class="cf-search-modal-input"
-          type="search"
-          placeholder="Search pages, settings &amp; actions…"
-          autocomplete="off"
-          spellcheck="false"
-          x-model="$store.globalSearch.query"
-          @keydown.escape.stop="$store.globalSearch.close()"
+        <svg class="w-5 h-5 text-text-muted flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2"
+          viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8" />
+          <path stroke-linecap="round" d="M21 21l-4.35-4.35" />
+        </svg>
+        <input id="cf-search-input" class="cf-search-modal-input" type="search"
+          placeholder="Search pages, settings &amp; actionsâ€¦" autocomplete="off" spellcheck="false"
+          x-model="$store.globalSearch.query" @keydown.escape.stop="$store.globalSearch.close()"
           @keydown.arrow-down.prevent="$store.globalSearch.moveDown()"
           @keydown.arrow-up.prevent="$store.globalSearch.moveUp()"
           @keydown.enter.prevent="$store.globalSearch.selectCurrent()" />
@@ -619,13 +547,9 @@
       <!-- Category tabs -->
       <div class="cf-search-tabs" role="tablist" aria-label="Search categories">
         <template x-for="cat in $store.globalSearch.categories" :key="cat.id">
-          <button
-            class="cf-search-tab"
-            :class="{ 'is-active': $store.globalSearch.activeCategory === cat.id }"
-            @click="$store.globalSearch.setCategory(cat.id)"
-            role="tab"
-            :aria-selected="($store.globalSearch.activeCategory === cat.id).toString()"
-            x-text="cat.label">
+          <button class="cf-search-tab" :class="{ 'is-active': $store.globalSearch.activeCategory === cat.id }"
+            @click="$store.globalSearch.setCategory(cat.id)" role="tab"
+            :aria-selected="($store.globalSearch.activeCategory === cat.id).toString()" x-text="cat.label">
           </button>
         </template>
       </div>
@@ -637,20 +561,12 @@
         <template x-if="$store.globalSearch.results.length > 0">
           <div>
             <template x-for="(item, idx) in $store.globalSearch.results" :key="item.id">
-              <div
-                class="cf-search-result"
-                :class="{ 'is-selected': $store.globalSearch.selectedIndex === idx }"
-                @mouseenter="$store.globalSearch.selectedIndex = idx"
-                @click="$store.globalSearch.close()"
-                role="option"
-                :aria-selected="($store.globalSearch.selectedIndex === idx).toString()"
-                tabindex="-1">
+              <div class="cf-search-result" :class="{ 'is-selected': $store.globalSearch.selectedIndex === idx }"
+                @mouseenter="$store.globalSearch.selectedIndex = idx" @click="$store.globalSearch.close()" role="option"
+                :aria-selected="($store.globalSearch.selectedIndex === idx).toString()" tabindex="-1">
 
                 <!-- Icon -->
-                <div
-                  class="cf-search-result-icon"
-                  :class="`cf-card-icon--${item.color}`"
-                  aria-hidden="true">
+                <div class="cf-search-result-icon" :class="`cf-card-icon--${item.color}`" aria-hidden="true">
                   <i :data-lucide="item.icon" class="w-4 h-4"></i>
                 </div>
 
@@ -661,7 +577,10 @@
                 </div>
 
                 <!-- Chevron -->
-                <svg class="w-4 h-4 text-text-muted flex-shrink-0 opacity-50" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7-7"/></svg>
+                <svg class="w-4 h-4 text-text-muted flex-shrink-0 opacity-50" fill="none" stroke="currentColor"
+                  stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7-7" />
+                </svg>
               </div>
             </template>
           </div>
@@ -670,7 +589,10 @@
         <!-- Empty state -->
         <template x-if="$store.globalSearch.results.length === 0">
           <div class="cf-search-empty" role="status">
-            <svg class="w-12 h-12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="M21 21l-4.35-4.35"/></svg>
+            <svg class="w-12 h-12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8" />
+              <path stroke-linecap="round" d="M21 21l-4.35-4.35" />
+            </svg>
             <div>
               <p class="text-sm font-medium text-text-secondary">No results found</p>
               <p class="text-xs text-text-muted mt-1" x-show="$store.globalSearch.query.length > 0">
@@ -686,93 +608,86 @@
 
       <!-- Footer hints -->
       <div class="cf-search-footer">
-        <span class="cf-search-hint"><kbd class="cf-kbd">↑↓</kbd> Navigate</span>
-        <span class="cf-search-hint"><kbd class="cf-kbd">↵</kbd> Open</span>
+        <span class="cf-search-hint"><kbd class="cf-kbd">â†‘â†“</kbd> Navigate</span>
+        <span class="cf-search-hint"><kbd class="cf-kbd">â†µ</kbd> Open</span>
         <span class="cf-search-hint"><kbd class="cf-kbd">esc</kbd> Close</span>
         <span class="cf-search-hint ml-auto opacity-70"><kbd class="cf-kbd">/</kbd> to search</span>
       </div>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════════════
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        DELETE ENVIRONMENT CONFIRMATION MODAL
-  ═══════════════════════════════════════════════════════════════════ -->
+  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <!-- This is scoped to the main x-data, so we use a separate Alpine component -->
-  <div
-    x-data="{ show: false }"
-    x-init="$watch('$store', () => {})"
-    @open-delete.window="show = true"
-    style="display:none"
-    x-show="show"
-    class="fixed inset-0 z-[60] flex items-center justify-center p-4"
-    x-transition:enter="transition ease-out duration-200"
-    x-transition:enter-start="opacity-0"
-    x-transition:enter-end="opacity-100"
-    x-transition:leave="transition ease-in duration-150"
-    x-transition:leave-start="opacity-100"
-    x-transition:leave-end="opacity-0"
-    aria-modal="true" role="dialog">
+  <div x-data="{ show: false }" x-init="$watch('$store', () => {})" @open-delete.window="show = true"
+    style="display:none" x-show="show" class="fixed inset-0 z-[60] flex items-center justify-center p-4"
+    x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
+    x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150"
+    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" aria-modal="true" role="dialog">
     <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="show = false"></div>
-    <div
-      class="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 z-10"
-      x-transition:enter="transition ease-out duration-200"
-      x-transition:enter-start="opacity-0 scale-95"
+    <div class="relative bg-surface-card rounded-2xl shadow-2xl w-full max-w-sm p-6 z-10"
+      x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95"
       x-transition:enter-end="opacity-100 scale-100">
       <div class="flex items-center gap-3 mb-4">
         <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
-          <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+          <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
         </div>
         <div>
           <h3 class="text-base font-bold text-text-primary">Delete Environment</h3>
           <p class="text-xs text-text-muted mt-0.5">This action cannot be undone.</p>
         </div>
       </div>
-      <p class="text-sm text-text-secondary mb-5 leading-relaxed">Are you sure you want to delete the <strong class="text-text-primary">Production</strong> environment? All data, configurations, and logs associated with it will be permanently removed.</p>
+      <p class="text-sm text-text-secondary mb-5 leading-relaxed">Are you sure you want to delete the <strong
+          class="text-text-primary">Production</strong> environment? All data, configurations, and logs associated with
+        it will be permanently removed.</p>
       <div class="flex gap-3">
         <button @click="show = false" class="cf-btn cf-btn--ghost flex-1 border border-surface-border">Cancel</button>
-        <button @click="show = false; $store.toast.show('Environment deleted')" class="cf-btn flex-1 bg-red-500 hover:bg-red-600 text-white border-transparent">Delete</button>
+        <button @click="show = false; $store.toast.show('Environment deleted')"
+          class="cf-btn flex-1 bg-red-500 hover:bg-red-600 text-white border-transparent">Delete</button>
       </div>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════════════
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
        EDIT ENVIRONMENT MODAL
-  ═══════════════════════════════════════════════════════════════════ -->
-  <div
-    x-data="{ show: false }"
-    @open-edit.window="show = true"
-    style="display:none"
-    x-show="show"
+  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <div x-data="{ show: false }" @open-edit.window="show = true" style="display:none" x-show="show"
     class="fixed inset-0 z-[60] flex items-center justify-center p-4"
-    x-transition:enter="transition ease-out duration-200"
-    x-transition:enter-start="opacity-0"
-    x-transition:enter-end="opacity-100"
-    x-transition:leave="transition ease-in duration-150"
-    x-transition:leave-start="opacity-100"
-    x-transition:leave-end="opacity-0"
-    aria-modal="true" role="dialog">
+    x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
+    x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150"
+    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" aria-modal="true" role="dialog">
     <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="show = false"></div>
-    <div
-      class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md z-10"
-      x-transition:enter="transition ease-out duration-200"
-      x-transition:enter-start="opacity-0 scale-95"
+    <div class="relative bg-surface-card rounded-2xl shadow-2xl w-full max-w-md z-10"
+      x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95"
       x-transition:enter-end="opacity-100 scale-100">
       <!-- Modal Header -->
       <div class="flex items-center justify-between px-6 py-4 border-b border-surface-border">
         <div class="flex items-center gap-2.5">
           <div class="w-8 h-8 rounded-lg bg-corefinity-orange/10 flex items-center justify-center">
-            <svg class="w-4 h-4 text-corefinity-orange" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            <svg class="w-4 h-4 text-corefinity-orange" fill="none" stroke="currentColor" stroke-width="2"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
           </div>
           <h3 class="text-base font-bold text-text-primary">Edit Environment</h3>
         </div>
-        <button @click="show = false" class="text-text-muted hover:text-text-primary transition-colors p-1 rounded-lg hover:bg-surface-elevated">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        <button @click="show = false"
+          class="text-text-muted hover:text-text-primary transition-colors p-1 rounded-lg hover:bg-surface-elevated">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
         </button>
       </div>
       <!-- Modal Body -->
       <div class="px-6 py-5 space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-text-muted uppercase tracking-wider mb-1.5">Environment Name</label>
+          <label class="block text-xs font-semibold text-text-muted uppercase tracking-wider mb-1.5">Environment
+            Name</label>
           <input type="text" value="Production" class="cf-input" />
         </div>
         <div>
@@ -785,18 +700,21 @@
           </select>
         </div>
         <div>
-          <label class="block text-xs font-semibold text-text-muted uppercase tracking-wider mb-1.5">Primary Domain</label>
+          <label class="block text-xs font-semibold text-text-muted uppercase tracking-wider mb-1.5">Primary
+            Domain</label>
           <input type="text" value="example.corefinity.io" class="cf-input" />
         </div>
         <div>
           <label class="block text-xs font-semibold text-text-muted uppercase tracking-wider mb-1.5">Notes</label>
-          <textarea rows="2" class="cf-input resize-none" placeholder="Optional notes about this environment…"></textarea>
+          <textarea rows="2" class="cf-input resize-none"
+            placeholder="Optional notes about this environmentâ€¦"></textarea>
         </div>
       </div>
       <!-- Modal Footer -->
       <div class="px-6 py-4 border-t border-surface-border flex gap-3 justify-end">
         <button @click="show = false" class="cf-btn cf-btn--ghost border border-surface-border px-5">Cancel</button>
-        <button @click="show = false; $store.toast.show('Environment updated!')" class="cf-btn cf-btn--orange px-6">Save Changes</button>
+        <button @click="show = false; $store.toast.show('Environment updated!')" class="cf-btn cf-btn--orange px-6">Save
+          Changes</button>
       </div>
     </div>
   </div>
@@ -805,10 +723,270 @@
   <script src="assets/js/corefinity.js"></script>
 
   <script>
-    window.getHeroiconPath = function(name) {
-      const paths = {"menu":"<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M4 6h16M4 12h16M4 18h16\"/>","panel-left":"<path d=\"M3 5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5z\"/><path d=\"M9 3v18\"/><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M13 9l-3 3 3 3\"/>","search":"<circle cx=\"11\" cy=\"11\" r=\"8\"/><path stroke-linecap=\"round\" d=\"M21 21l-4.35-4.35\"/>","bell":"<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9\"/>","clock":"<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 8v4l3 3\"/><circle cx=\"12\" cy=\"12\" r=\"9\"/>","file-text":"<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M8 12h8m-8 4h5m-7 4h12a2 2 0 002-2V8a2 2 0 00-2-2h-3.586a1 1 0 01-.707-.293l-1.414-1.414A1 1 0 0011.586 4H6a2 2 0 00-2 2v12a2 2 0 002 2z\"/>","check":"<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M5 13l4 4L19 7\"/>","chevron-down":"<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M19 9l-7 7-7-7\"/>","user":"<circle cx=\"12\" cy=\"8\" r=\"4\"/><path stroke-linecap=\"round\" d=\"M4 20c0-4 3.6-7 8-7s8 3 8 7\"/>","key":"<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z\"/>","log-out":"<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013-3v1\"/>","shield":"<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z\"/>","lock":"<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z\"/>","chevron-right":"<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9 5l7 7-7-7\"/>","mail":"<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z\"/>","smartphone":"<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z\"/>","info":"<circle cx=\"12\" cy=\"12\" r=\"10\"/><path stroke-linecap=\"round\" d=\"M12 8v4m0 4h.01\"/>","eye":"<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 12a3 3 0 11-6 0 3 3 0 016 0z\"/><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z\"/>","triangle-alert":"<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z\"/>","trash-2":"<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16\"/>","terminal":"<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z\"/>","layout-dashboard":"<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z\"/>"};
+    function environmentPage() {
+      return {
+        activeTab: 'General',
+        selectedAction: '',
+        actions: ['Restart Server', 'Clear Cache', 'Run Migrations', 'Reset PHP', 'Flush Redis', 'Rebuild Assets'],
+        tabs: ['General', 'Pods', 'Nodes', 'Deployments', 'Emails', 'Cache Warmer', 'Actions', 'Diagnostics', 'Autoscaler', 'Monitors', 'Quick Actions', 'Firewall'],
+        pods: [
+          { name: 'adminer-deployment-79cfdb74f8-f6x8z', node: '1-a117bd32-njch', nodeType: 'c4a-standard-16', ip: '10.120.16.17', age: '2w', containers: '1/1', cpu: '1m / 500m', memory: '8Mi / 1024Mi', restarts: '0', ready: true, status: 'Running' },
+          { name: 'adminer-deployment-fb689bfc4-b2tjq', node: '2-0b5d2096-cfmn', nodeType: 'n2-custom-16-102400', ip: '10.40.46.119', age: '4h', containers: '1/1', cpu: '1m / 500m', memory: '5Mi / 1024Mi', restarts: '0', ready: true, status: 'Running' },
+          { name: 'adminer-deployment-fb689bfc4-gw659', node: '1-38a39b7c-ie2w', nodeType: 'n2-custom-20-163840', ip: '10.36.16.3', age: '1mo', containers: '1/1', cpu: '1m / 500m', memory: '16Mi / 1024Mi', restarts: '0', ready: true, status: 'Running' },
+          { name: 'alertmanager-k-prometheus-alertmanager-0', node: '2-49bb9ea7-hppf', nodeType: 'n2d-highmem-8', ip: '10.76.21.16', age: '6mos', containers: '2/2', cpu: '1m', memory: '49283072m', restarts: '0', ready: true, status: 'Running' },
+          { name: 'alertmanager-kube-prometheus-stack-1701-alertmanager-0', node: '2-f5c2d627-80dg', nodeType: 'c4a-highmem-16', ip: '10.120.43.83', age: '2mos', containers: '2/2', cpu: '1m', memory: '49283072m', restarts: '0', ready: true, status: 'Running' },
+          { name: 'alertmanager-kube-prometheus-stack-1701-alertmanager-0', node: '1-a1ec8800-cl1n', nodeType: 'n2-custom-20-163840', ip: '10.36.13.253', age: '4mos', containers: '2/2', cpu: '1m', memory: '49283072m', restarts: '0', ready: true, status: 'Running' },
+          { name: 'alertmanager-kube-prometheus-stack-1756-alertmanager-0', node: '2-4545d92b-86np', nodeType: 'c4a-standard-16', ip: '10.52.2.156', age: '6mos', containers: '2/2', cpu: '1m', memory: '52428800m', restarts: '0', ready: true, status: 'Running' }
+        ],
+        nodes: [
+          { name: '1-4a631dbe-96dn', internalIp: '10.154.1.147', externalIp: 'â€”', version: 'v1.33.8-gke.1026000', kernelVersion: '6.6.113+', cpu: '6687m / 16000m (42%)', memory: '34954Mi / 64189Mi (59%)' },
+          { name: '1-a117bd32-732o', internalIp: '10.154.0.130', externalIp: 'â€”', version: 'v1.33.8-gke.1026000', kernelVersion: '6.6.113+', cpu: '3364m / 16000m (21%)', memory: '28056Mi / 64189Mi (47%)' },
+          { name: '1-4a631dbe-qd5c', internalIp: '10.154.0.61', externalIp: 'â€”', version: 'v1.33.8-gke.1026000', kernelVersion: '6.6.113+', cpu: '7263m / 16000m (45%)', memory: '37085Mi / 64189Mi (63%)' },
+          { name: '2-f5c2d627-tnhl', internalIp: '10.154.1.210', externalIp: 'â€”', version: 'v1.33.5-gke.2019000', kernelVersion: '6.6.113+', cpu: '10225m / 16000m (64%)', memory: '11710Mi / 128573Mi (98%)' },
+          { name: '2-f5c2d627-pdbm', internalIp: '10.154.1.231', externalIp: 'â€”', version: 'v1.33.5-gke.2019000', kernelVersion: '6.6.113+', cpu: '6457m / 16000m (40%)', memory: '110771Mi / 128573Mi (93%)' }
+        ],
+        tabContent: {},
+        loadingTab: '',
+        tabPartials: {
+          General: 'assets/partials/environment/general.html',
+          Pods: 'assets/partials/environment/pods.html',
+          Nodes: 'assets/partials/environment/nodes.html',
+          Deployments: 'assets/partials/environment/deployments.html',
+          Emails: 'assets/partials/environment/emails.html',
+          'Cache Warmer': 'assets/partials/environment/cache-warmer.html',
+          Actions: 'assets/partials/environment/actions.html',
+          Diagnostics: 'assets/partials/environment/diagnostics.html',
+          Autoscaler: 'assets/partials/environment/autoscaler.html',
+          Monitors: 'assets/partials/environment/monitors.html',
+          'Quick Actions': 'assets/partials/environment/quick-actions.html',
+          Firewall: 'assets/partials/environment/firewall.html'
+        },
+        init() {
+          this.loadTabContent(this.activeTab);
+        },
+        get loadingMarkup() {
+          return `
+            <div class="flex min-h-[20rem] items-center justify-center px-6 py-12 text-center">
+              <div>
+                <div class="mx-auto h-10 w-10 animate-spin rounded-full border-2 border-surface-border border-t-corefinity-cyan"></div>
+                <p class="mt-4 text-sm font-medium text-text-primary">Loading ${this.activeTab}...</p>
+                <p class="mt-1 text-xs text-text-muted">Fetching tab content from a separate partial file.</p>
+              </div>
+            </div>
+          `;
+        },
+        partialPath(tab) {
+          return this.tabPartials[tab] || 'assets/partials/environment/placeholder.html';
+        },
+        async setActiveTab(tab) {
+          this.activeTab = tab;
+          await this.loadTabContent(tab);
+        },
+        async loadTabContent(tab) {
+          if (this.tabContent[tab] || this.loadingTab === tab) return;
+          this.loadingTab = tab;
+          try {
+            const response = await fetch(this.partialPath(tab), { cache: 'no-store', headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+            if (!response.ok) throw new Error('Failed to load partial');
+            const html = await response.text();
+            this.tabContent = { ...this.tabContent, [tab]: html };
+            this.$nextTick(() => {
+              // Dispatch event so sub-components can self-init.
+              // DO NOT call Alpine.initTree() here — it re-initialises every
+              // x-data inside tabPanel recursively and causes an infinite loop
+              // when autoscalerTab.init() triggers Chart.js which re-renders DOM.
+              this.$refs.tabPanel.dispatchEvent(
+                new CustomEvent('tab-content-ready', { bubbles: true, detail: { tab } })
+              );
+            });
+          } catch (error) {
+            this.tabContent = {
+              ...this.tabContent,
+              [tab]: `
+                <div class="px-6 py-12 text-center">
+                  <p class="text-sm font-semibold text-text-primary">Failed to load ${tab}</p>
+                  <p class="mt-1 text-xs text-text-muted">Check the partial file path and try again.</p>
+                </div>
+              `
+            };
+          } finally {
+            if (this.loadingTab === tab) this.loadingTab = '';
+          }
+        }
+      };
+    }
+
+    // ─── Autoscaler Chart Controller (Vanilla JS) ────────────────────────────
+    // Uses vanilla JS instead of an Alpine x-data component to avoid nested
+    // x-data scope issues when content is injected via x-html.
+    // Activated by the 'tab-content-ready' event dispatched from loadTabContent().
+    (function () {
+      const DATA = {
+        // Hour: sudden CPU spike at 20m (deployment burst), then stabilises
+        hour: {
+          labels: ['00m', '05m', '10m', '15m', '20m', '25m', '30m', '35m', '40m', '45m', '50m', '55m'],
+          cpu: [18, 21, 19, 23, 87, 92, 76, 58, 44, 36, 28, 22],
+          memory: [48, 47, 49, 50, 71, 79, 82, 80, 75, 68, 60, 55]
+        },
+        // Day: classic diurnal curve — dead night → peak noon → drop midnight
+        day: {
+          labels: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'],
+          cpu: [8, 5, 4, 7, 28, 55, 78, 72, 61, 45, 25, 12],
+          memory: [38, 35, 33, 36, 52, 65, 74, 73, 68, 57, 46, 40]
+        },
+        // Week: high weekdays, significant dip Saturday, near-idle Sunday
+        week: {
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          cpu: [52, 61, 58, 74, 83, 29, 14],
+          memory: [63, 68, 66, 72, 77, 44, 32]
+        },
+        // Month: trend up W1-W3, sharp drop W4 (maintenance), recovery W5-W8, plateau W9-W12
+        month: {
+          labels: ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'W9', 'W10', 'W11', 'W12'],
+          cpu: [31, 38, 45, 12, 27, 51, 63, 70, 66, 68, 65, 64],
+          memory: [50, 54, 59, 28, 42, 58, 67, 73, 71, 72, 70, 69]
+        }
+      };
+
+      let chartInstance = null;
+      let activeRange = 'day';
+
+      function avg(key) {
+        const s = DATA[activeRange][key];
+        return Math.round(s.reduce((a, v) => a + v, 0) / s.length);
+      }
+
+      function updateAvgLabels() {
+        const cpuEl = document.getElementById('as-cpu-avg');
+        const memEl = document.getElementById('as-mem-avg');
+        if (cpuEl) cpuEl.textContent = avg('cpu') + '%';
+        if (memEl) memEl.textContent = avg('memory') + '%';
+      }
+
+      function updateRangeButtons(range) {
+        document.querySelectorAll('.as-range-btn').forEach(btn => {
+          const active = btn.dataset.range === range;
+          btn.className = [
+            'as-range-btn inline-flex h-9 items-center rounded-lg px-5 text-sm font-semibold transition-colors',
+            active
+              ? 'bg-corefinity-orange text-white'
+              : 'border border-surface-border bg-surface-bg text-text-primary hover:bg-surface-elevated'
+          ].join(' ');
+        });
+      }
+
+      function setRange(range) {
+        if (!chartInstance || activeRange === range) return;
+        activeRange = range;
+        const src = DATA[range];
+        chartInstance.data.labels = src.labels;
+        chartInstance.data.datasets[0].data = src.cpu;
+        chartInstance.data.datasets[1].data = src.memory;
+        chartInstance.update();
+        updateRangeButtons(range);
+        updateAvgLabels();
+      }
+
+      function initChart() {
+        const canvas = document.getElementById('autoscaler-canvas');
+        if (!canvas || !window.Chart) return;
+
+        // Destroy previous instance if tab is revisited
+        const existing = window.Chart.getChart(canvas);
+        if (existing) existing.destroy();
+
+        const src = DATA[activeRange];
+        chartInstance = new window.Chart(canvas.getContext('2d'), {
+          type: 'line',
+          data: {
+            labels: src.labels,
+            datasets: [
+              {
+                label: 'CPU',
+                data: src.cpu,
+                borderColor: '#009BDE',
+                pointBackgroundColor: '#009BDE',
+                pointRadius: 3.5,
+                pointHoverRadius: 5,
+                borderWidth: 3,
+                tension: 0.35,
+                fill: false
+              },
+              {
+                label: 'Memory',
+                data: src.memory,
+                borderColor: '#FF7102',
+                pointBackgroundColor: '#FF7102',
+                pointRadius: 3.5,
+                pointHoverRadius: 5,
+                borderWidth: 3,
+                tension: 0.35,
+                fill: false
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: 700, easing: 'easeOutQuart' },
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+              legend: {
+                labels: { color: '#3B5978', usePointStyle: true, pointStyle: 'circle', boxWidth: 10, boxHeight: 10 }
+              },
+              tooltip: {
+                callbacks: {
+                  label: ctx => ctx.dataset.label + ': ' + ctx.formattedValue + '%'
+                }
+              }
+            },
+            scales: {
+              y: {
+                min: 0, max: 100,
+                ticks: { color: '#6F8BA7', callback: v => v + '%' },
+                grid: { color: '#CFE1F1' }
+              },
+              x: {
+                ticks: { color: '#6F8BA7' },
+                grid: { color: 'rgba(207,225,241,0.35)' }
+              }
+            }
+          }
+        });
+
+        // Bind range buttons
+        document.querySelectorAll('.as-range-btn').forEach(btn => {
+          btn.addEventListener('click', () => setRange(btn.dataset.range));
+        });
+
+        updateAvgLabels();
+      }
+
+      // Listen for the event dispatched by loadTabContent() after x-html renders
+      document.addEventListener('tab-content-ready', function handler(e) {
+        if (e.detail && e.detail.tab === 'Autoscaler') {
+          // Reset state each time the tab is opened
+          activeRange = 'day';
+          // Give the DOM a tick to render the injected HTML before querying IDs
+          requestAnimationFrame(() => {
+            if (!window.Chart) {
+              // Chart.js not yet ready — retry after a short delay
+              setTimeout(initChart, 200);
+            } else {
+              initChart();
+            }
+          });
+        }
+      });
+    }());
+  </script>
+
+  <script>
+    window.getHeroiconPath = function (name) {
+      const paths = { "menu": "<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M4 6h16M4 12h16M4 18h16\"/>", "panel-left": "<path d=\"M3 5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5z\"/><path d=\"M9 3v18\"/><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M13 9l-3 3 3 3\"/>", "search": "<circle cx=\"11\" cy=\"11\" r=\"8\"/><path stroke-linecap=\"round\" d=\"M21 21l-4.35-4.35\"/>", "bell": "<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9\"/>", "clock": "<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 8v4l3 3\"/><circle cx=\"12\" cy=\"12\" r=\"9\"/>", "file-text": "<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M8 12h8m-8 4h5m-7 4h12a2 2 0 002-2V8a2 2 0 00-2-2h-3.586a1 1 0 01-.707-.293l-1.414-1.414A1 1 0 0011.586 4H6a2 2 0 00-2 2v12a2 2 0 002 2z\"/>", "check": "<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M5 13l4 4L19 7\"/>", "chevron-down": "<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M19 9l-7 7-7-7\"/>", "user": "<circle cx=\"12\" cy=\"8\" r=\"4\"/><path stroke-linecap=\"round\" d=\"M4 20c0-4 3.6-7 8-7s8 3 8 7\"/>", "key": "<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z\"/>", "log-out": "<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013-3v1\"/>", "shield": "<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z\"/>", "lock": "<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z\"/>", "chevron-right": "<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9 5l7 7-7-7\"/>", "mail": "<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z\"/>", "smartphone": "<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z\"/>", "info": "<circle cx=\"12\" cy=\"12\" r=\"10\"/><path stroke-linecap=\"round\" d=\"M12 8v4m0 4h.01\"/>", "eye": "<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 12a3 3 0 11-6 0 3 3 0 016 0z\"/><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z\"/>", "triangle-alert": "<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z\"/>", "trash-2": "<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16\"/>", "terminal": "<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z\"/>", "layout-dashboard": "<path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z\"/>" };
       return paths[name] || '';
     };
   </script>
 </body>
+
 </html>

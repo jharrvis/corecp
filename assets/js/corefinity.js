@@ -34,6 +34,29 @@ window.cfIcon = function (name, size = 16) {
    ═══════════════════════════════════════════════════════════════════════ */
 document.addEventListener('alpine:init', () => {
 
+  /* ─── Theme Store (Dark Mode) ───────────────────────────────────── */
+  Alpine.store('theme', {
+    mode: localStorage.getItem('cf-theme') || 'light',
+
+    init() {
+      this.apply();
+    },
+
+    toggle() {
+      this.mode = this.mode === 'light' ? 'dark' : 'light';
+      localStorage.setItem('cf-theme', this.mode);
+      this.apply();
+    },
+
+    apply() {
+      if (this.mode === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
+  });
+
   /* ─── Sidebar Store (Desktop Collapse) ──────────────────────────── */
   Alpine.store('sidebar', {
     open: localStorage.getItem('cf-sidebar') !== 'closed',
