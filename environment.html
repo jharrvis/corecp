@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -743,7 +743,9 @@
           Firewall: 'partials/environment/firewall.html'
         },
         init() {
-          this.loadTabContent(this.activeTab);
+          this.loadTabContent(this.activeTab).then(() => {
+            this.$nextTick(() => this.hydrateActiveTab(this.activeTab));
+          });
         },
         get loadingMarkup() {
           return `
@@ -762,6 +764,16 @@
         async setActiveTab(tab) {
           this.activeTab = tab;
           await this.loadTabContent(tab);
+          this.$nextTick(() => this.hydrateActiveTab(tab));
+        },
+        hydrateActiveTab(tab) {
+          if (!this.$refs.tabPanel) return;
+          if (window.Alpine && typeof window.Alpine.initTree === 'function') {
+            window.Alpine.initTree(this.$refs.tabPanel);
+          }
+          this.$refs.tabPanel.dispatchEvent(
+            new CustomEvent('tab-content-ready', { bubbles: true, detail: { tab } })
+          );
         },
         async loadTabContent(tab) {
           if (this.tabContent[tab] || this.loadingTab === tab) return;
@@ -771,15 +783,6 @@
             if (!response.ok) throw new Error('Failed to load partial');
             const html = await response.text();
             this.tabContent = { ...this.tabContent, [tab]: html };
-            this.$nextTick(() => {
-              // Dispatch event so sub-components can self-init.
-              // DO NOT call Alpine.initTree() here — it re-initialises every
-              // x-data inside tabPanel recursively and causes an infinite loop
-              // when autoscalerTab.init() triggers Chart.js which re-renders DOM.
-              this.$refs.tabPanel.dispatchEvent(
-                new CustomEvent('tab-content-ready', { bubbles: true, detail: { tab } })
-              );
-            });
           } catch (error) {
             this.tabContent = {
               ...this.tabContent,
@@ -797,7 +800,7 @@
       };
     }
 
-    // ─── Autoscaler Chart Controller (Vanilla JS) ────────────────────────────
+    // â”€â”€â”€ Autoscaler Chart Controller (Vanilla JS) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // Uses vanilla JS instead of an Alpine x-data component to avoid nested
     // x-data scope issues when content is injected via x-html.
     // Activated by the 'tab-content-ready' event dispatched from loadTabContent().
@@ -809,7 +812,7 @@
           cpu: [18, 21, 19, 23, 87, 92, 76, 58, 44, 36, 28, 22],
           memory: [48, 47, 49, 50, 71, 79, 82, 80, 75, 68, 60, 55]
         },
-        // Day: classic diurnal curve — dead night → peak noon → drop midnight
+        // Day: classic diurnal curve â€” dead night â†’ peak noon â†’ drop midnight
         day: {
           labels: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'],
           cpu: [8, 5, 4, 7, 28, 55, 78, 72, 61, 45, 25, 12],
@@ -951,7 +954,7 @@
           // Give the DOM a tick to render the injected HTML before querying IDs
           requestAnimationFrame(() => {
             if (!window.Chart) {
-              // Chart.js not yet ready — retry after a short delay
+              // Chart.js not yet ready â€” retry after a short delay
               setTimeout(initChart, 200);
             } else {
               initChart();
@@ -971,3 +974,5 @@
 </body>
 
 </html>
+
+
