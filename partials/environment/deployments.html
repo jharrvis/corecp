@@ -17,8 +17,31 @@
   allSelected: false,
   selectedIds: [],
   deployments: [],
+  pipelineOptions: ['Laravel', 'Node.js', 'Python'],
+  providerOptionsByPipeline: {
+    'Laravel': ['GitLab', 'GitHub', 'Bitbucket'],
+    'Node.js': ['GitHub', 'GitLab'],
+    'Python': ['GitHub', 'GitLab', 'Bitbucket']
+  },
+  connectedAccounts: {
+    GitLab: true,
+    GitHub: false,
+    Bitbucket: false
+  },
+  repositoryOptionsByProvider: {
+    GitLab: ['corefinity/platform-api', 'corefinity/worker-service'],
+    GitHub: ['corefinity/control-panel', 'corefinity/landing-page'],
+    Bitbucket: ['corefinity/legacy-monolith']
+  },
+  branchOptionsByRepository: {
+    'corefinity/platform-api': ['main', 'develop', 'staging'],
+    'corefinity/worker-service': ['main', 'develop'],
+    'corefinity/control-panel': ['master', 'main', 'release'],
+    'corefinity/landing-page': ['main', 'staging'],
+    'corefinity/legacy-monolith': ['master', 'production']
+  },
   repos: [
-    { id: 1, pipeline: 'Laravel', provider: 'GitLab', url: 'user/myrepo/functions', branch: 'main', path: '/' }
+    { id: 1, pipeline: '', provider: '', repository: '', branch: '', path: '/', saved: false, validation: '' }
   ],
   async init() {
     await this.loadDeployments();
@@ -44,8 +67,58 @@
     this.selectedAction = action;
     this.actionMenuOpen = false;
   },
+  isProviderConnected(provider) {
+    return !!this.connectedAccounts[provider];
+  },
+  getProviderOptions(repo) {
+    return this.providerOptionsByPipeline[repo.pipeline] || [];
+  },
+  getRepositoryOptions(repo) {
+    if (!repo.provider || !this.isProviderConnected(repo.provider)) return [];
+    return this.repositoryOptionsByProvider[repo.provider] || [];
+  },
+  getBranchOptions(repo) {
+    return this.branchOptionsByRepository[repo.repository] || [];
+  },
+  onPipelineChange(repo) {
+    repo.provider = '';
+    repo.repository = '';
+    repo.branch = '';
+    repo.saved = false;
+    repo.validation = '';
+  },
+  onProviderChange(repo) {
+    repo.repository = '';
+    repo.branch = '';
+    repo.saved = false;
+    repo.validation = this.isProviderConnected(repo.provider) || !repo.provider
+      ? ''
+      : 'Provider account is not connected. Please connect it first.';
+  },
+  onRepositoryChange(repo) {
+    repo.branch = '';
+    repo.saved = false;
+    repo.validation = '';
+  },
+  onBranchChange(repo) {
+    repo.saved = false;
+    repo.validation = '';
+  },
+  canSaveRepo(repo) {
+    return !!(repo.pipeline && repo.provider && this.isProviderConnected(repo.provider) && repo.repository && repo.branch);
+  },
+  saveRepo(repo) {
+    if (!this.canSaveRepo(repo)) {
+      repo.validation = repo.provider && !this.isProviderConnected(repo.provider)
+        ? 'Provider account is not connected. Please connect it first.'
+        : 'Complete pipeline, provider, repository, and branch before saving.';
+      return;
+    }
+    repo.saved = true;
+    repo.validation = '';
+  },
   addRepo() {
-    this.repos.push({ id: this.repos.length + 1, pipeline: '', provider: '', url: '', branch: 'main', path: '/' });
+    this.repos.push({ id: this.repos.length + 1, pipeline: '', provider: '', repository: '', branch: '', path: '/', saved: false, validation: '' });
   },
   removeRepo(idx) { this.repos.splice(idx, 1); },
   onSearchInput() {
@@ -151,44 +224,79 @@
       </div>
       <div class="space-y-2">
         <template x-for="(repo, idx) in repos" :key="repo.id">
-          <div class="flex flex-wrap items-center gap-2">
-            <!-- ID -->
-            <input type="text" :value="'#' + repo.id" readonly
-              class="cf-input w-12 text-center text-xs bg-surface-elevated cursor-default" />
-            <!-- Pipeline -->
-            <select x-model="repo.pipeline" class="cf-select text-sm" style="width:130px">
-              <option value="">Select pipeline</option>
-              <option>Laravel</option>
-              <option>Node.js</option>
-              <option>Python</option>
-            </select>
-            <!-- Provider -->
-            <select x-model="repo.provider" class="cf-select text-sm" style="width:160px">
-              <option value="">Select provider</option>
-              <option>GitLab</option>
-              <option>GitHub</option>
-              <option>Bitbucket</option>
-            </select>
-            <!-- Repo URL -->
-            <input type="text" x-model="repo.url" placeholder="user/repository"
-              class="cf-input text-sm flex-1 min-w-[180px]" />
-            <!-- Branch -->
-            <select x-model="repo.branch" class="cf-select text-sm" style="width:130px">
-              <option value="">Select a branch</option>
-              <option>main</option>
-              <option>master</option>
-              <option>develop</option>
-              <option>staging</option>
-            </select>
-            <!-- Path -->
-            <input type="text" x-model="repo.path" class="cf-input text-sm w-16 text-center" />
-            <!-- Delete -->
-            <button type="button" @click="removeRepo(idx)"
-              class="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-full bg-red-500 text-white hover:bg-red-600 transition-colors">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-              </svg>
-            </button>
+          <div class="rounded-lg border border-surface-border/60 p-3">
+            <div class="flex flex-wrap items-start gap-2">
+              <!-- ID -->
+              <input type="text" :value="'#' + repo.id" readonly
+                class="cf-input w-12 text-center text-xs bg-surface-elevated cursor-default" />
+
+              <!-- Pipeline -->
+              <select x-model="repo.pipeline" @change="onPipelineChange(repo)" class="cf-select text-sm" style="width:140px">
+                <option value="">Select pipeline</option>
+                <template x-for="pipeline in pipelineOptions" :key="pipeline">
+                  <option :value="pipeline" x-text="pipeline"></option>
+                </template>
+              </select>
+
+              <!-- Provider -->
+              <select x-model="repo.provider" @change="onProviderChange(repo)" :disabled="!repo.pipeline"
+                class="cf-select text-sm disabled:cursor-not-allowed disabled:opacity-60" style="width:170px">
+                <option value="">Select provider</option>
+                <template x-for="provider in getProviderOptions(repo)" :key="provider">
+                  <option :value="provider" x-text="provider"></option>
+                </template>
+              </select>
+
+              <!-- Repository -->
+              <select x-model="repo.repository" @change="onRepositoryChange(repo)"
+                :disabled="!repo.provider || !isProviderConnected(repo.provider)"
+                class="cf-select text-sm disabled:cursor-not-allowed disabled:opacity-60" style="width:220px">
+                <option value="">Select repository</option>
+                <template x-for="repository in getRepositoryOptions(repo)" :key="repository">
+                  <option :value="repository" x-text="repository"></option>
+                </template>
+              </select>
+
+              <!-- Branch -->
+              <select x-model="repo.branch" @change="onBranchChange(repo)" :disabled="!repo.repository"
+                class="cf-select text-sm disabled:cursor-not-allowed disabled:opacity-60" style="width:150px">
+                <option value="">Select a branch</option>
+                <template x-for="branch in getBranchOptions(repo)" :key="branch">
+                  <option :value="branch" x-text="branch"></option>
+                </template>
+              </select>
+
+              <!-- Path -->
+              <input type="text" x-model="repo.path" :disabled="!repo.branch" placeholder="/path"
+                class="cf-input text-sm w-24 text-center disabled:cursor-not-allowed disabled:opacity-60" />
+
+              <!-- Save -->
+              <button type="button" @click="saveRepo(repo)" :disabled="!canSaveRepo(repo)"
+                :class="canSaveRepo(repo) ? 'bg-corefinity-cyan hover:bg-[#007db5] text-white' : 'bg-slate-200 text-slate-500 cursor-not-allowed'"
+                class="h-9 px-3 rounded-md text-xs font-semibold transition-colors">
+                Save
+              </button>
+
+              <!-- Delete -->
+              <button type="button" @click="removeRepo(idx)"
+                class="flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-full bg-red-500 text-white hover:bg-red-600 transition-colors">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
+
+            <div class="mt-2 flex items-center gap-3 text-xs">
+              <template x-if="repo.saved">
+                <span class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-1 font-semibold text-green-600">Saved</span>
+              </template>
+              <template x-if="repo.provider && !isProviderConnected(repo.provider)">
+                <span class="text-red-500">No connected account for selected provider.</span>
+              </template>
+              <template x-if="repo.validation">
+                <span class="text-red-500" x-text="repo.validation"></span>
+              </template>
+            </div>
           </div>
         </template>
       </div>
